@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "822634666690",
+    "firebase_url": "https://modern-9526d.firebaseio.com",
+    "project_id": "modern-9526d",
+    "storage_bucket": "modern-9526d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:822634666690:android:03d0adf79bcaf1a8",
+        "android_client_info": {
+          "package_name": "com.example.anubhav.modern"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "822634666690-80f93kkeidt7bq8f6ct7bgmvbgikd543.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.anubhav.modern",
+            "certificate_hash": "5db1f616151aedcbf675eb308ccae27ac44546fc"
+          }
+        },
+        {
+          "client_id": "822634666690-gou92gs6hcggvpnigrfubahdgc40lrba.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVi5LTgHICnwfBos6ISvFwgADq8Yd4dDo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "822634666690-gou92gs6hcggvpnigrfubahdgc40lrba.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
