@@ -19,6 +19,7 @@
         android:layout_marginTop="8dp"
         android:hint="Enter your phone number"
         android:textColor="#FFFFFF"
+        android:textColorHint="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -53,6 +54,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/SurrajKathuriaLogo" />
+        app:srcCompat="@drawable/surrajkathurialogo" />
 
 </android.support.constraint.ConstraintLayout>
