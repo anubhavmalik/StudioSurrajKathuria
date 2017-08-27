@@ -5,5 +5,6 @@ package com.example.anubhav.modern.Models;
  */
 
 public class InterestsItem {
+    /**To be made something else in future depending on the requirements*/
 
 }

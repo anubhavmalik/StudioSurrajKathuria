@@ -5,4 +5,5 @@ package com.example.anubhav.modern.Models;
  */
 
 public class HomeItem {
+
 }
