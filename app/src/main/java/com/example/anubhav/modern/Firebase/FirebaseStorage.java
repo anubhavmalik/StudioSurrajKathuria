@@ -5,4 +5,5 @@ package com.example.anubhav.modern.Firebase;
  */
 
 public class FirebaseStorage {
+//    FirebaseStorage storage = FirebaseStorage.getInstance();
 }

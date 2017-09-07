@@ -21,13 +21,13 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-
+                    /*TODO:Add fragment here*/
                     return true;
                 case R.id.navigation_catalog:
-                    mTextMessage.setText(R.string.title_dashboard);
+                    /*TODO:Add fragment here*/
                     return true;
                 case R.id.navigation_purchases:
-                    mTextMessage.setText(R.string.title_notifications);
+                    /*TODO:Add fragment here*/
                     return true;
             }
             return false;

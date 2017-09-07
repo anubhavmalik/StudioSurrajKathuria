@@ -9,30 +9,44 @@
             android:id="@+id/home_cardLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:weightSum="10">
+
             <ImageView
                 android:id="@+id/home_imageView"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:src="@drawable/surrajkathurialogo" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:weightSum="10">
 
 
                 <TextView
-                    android:id="@+id/hometitle_textView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:id="@+id/homedate_textView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="4"
+                    android:text="date" />
 
                 <TextView
                     android:id="@+id/hometime_textView"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_weight="6"
+                    android:text="time" />
             </LinearLayout>
 
-
+            <TextView
+                android:id="@+id/detail_textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="This is where we have the awesome post by users." />
         </LinearLayout>
 
 

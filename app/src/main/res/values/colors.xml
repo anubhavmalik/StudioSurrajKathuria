@@ -4,5 +4,6 @@
     <color name="colorPrimaryDark">#f20835</color>
     <color name="colorAccent">#d50000</color>
     <color name="hintColor">#efebe9</color>
+    <color name="logincolor">#bcb9b9</color>
 
 </resources>
