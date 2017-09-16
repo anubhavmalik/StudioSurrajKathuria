@@ -42,12 +42,13 @@ public class Login extends AppCompatActivity {
         setContentView(R.layout.activity_login2);
         mPhoneEditText = (EditText) findViewById(R.id.phone_edit_text);
         mLoginButton = (Button) findViewById(R.id.login_button);
+        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
         msharedPreferences = this.getSharedPreferences("loginState", MODE_PRIVATE);
         if (msharedPreferences.getBoolean("logged_in", false)) {
             goToMainAcivity();
             finish();
         } else {
-            mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
+
             mProgressBar.setVisibility(View.GONE);
             mAuth = FirebaseAuth.getInstance();
             mLoginButton.setOnClickListener(new View.OnClickListener() {
@@ -105,7 +106,7 @@ public class Login extends AppCompatActivity {
                     mLoginButton.setText("Login");
                     Snackbar.make(mLoginButton, "Can't authenticate", Snackbar.LENGTH_LONG);
                 }
-
+                mProgressBar.setVisibility(View.INVISIBLE);
             }
         };
         PhoneAuthProvider.getInstance().verifyPhoneNumber(mPhoneEditText.getText().toString(), 2, TimeUnit.MINUTES, this, mCallbacks);
@@ -127,11 +128,13 @@ public class Login extends AppCompatActivity {
 
     private void goToMainAcivity() {
         Snackbar.make(mLoginButton, "Welcome", Snackbar.LENGTH_SHORT).show();
+        if(mProgressBar.isShown())
+        mProgressBar.setVisibility(View.INVISIBLE);
         Handler h = new Handler();
         h.postDelayed(new Runnable() {
             @Override
             public void run() {
-                mProgressBar.setVisibility(View.GONE);
+
                 startActivity(new Intent(Login.this, MainActivity.class));
                 finish();
             }

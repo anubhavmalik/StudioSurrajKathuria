@@ -43,7 +43,7 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/detail_textView"
+                android:id="@+id/homedetail_textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="This is where we have the awesome post by users." />
