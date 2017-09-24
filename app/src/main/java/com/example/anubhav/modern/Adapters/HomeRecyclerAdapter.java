@@ -13,25 +13,24 @@ import com.example.anubhav.modern.R;
 
 import java.util.ArrayList;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * Created by Anubhav on 26-08-2017.
  */
 
 public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapter.HomeViewHolder> {
-    Context mContext;
-    ImageView imageView;
-    TextView detailTextView;
-    TextView timeTextView;
-    TextView dateTextView;
-    ArrayList<PostItem> arrayList;
-    HomeClickListener mClickListener;
+    private Context mContext;
+    //    ImageView imageView;
+//    TextView detailTextView;
+//    TextView timeTextView;
+//    TextView dateTextView;
+    private ArrayList<PostItem> arrayList;
+    private HomeClickListener mClickListener;
+//    PostItem postItem;
 
-    public HomeRecyclerAdapter(Context mContext, ImageView imageView, TextView detailTextView, TextView timeTextView, TextView dateTextView, ArrayList<PostItem> arrayList,HomeClickListener mClickListener) {
+    public HomeRecyclerAdapter(Context mContext, ArrayList<PostItem> arrayList, HomeClickListener mClickListener) {
         this.mContext = mContext;
-        this.imageView = imageView;
-        this.detailTextView = detailTextView;
-        this.timeTextView = timeTextView;
-        this.dateTextView = dateTextView;
         this.arrayList = arrayList;
         this.mClickListener=mClickListener;
     }
@@ -39,22 +38,23 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
 
     @Override
     public HomeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView= LayoutInflater.from(mContext).inflate(R.layout.catalogfragmentlayout,parent,false);
+        View itemView = LayoutInflater.from(mContext).inflate(R.layout.homecardlayout, parent, false);
         return  new HomeViewHolder(itemView,mClickListener);
     }
 
     @Override
     public void onBindViewHolder(HomeViewHolder holder, int position) {
-        PostItem toDoItem = arrayList.get(position);
-        holder.homeDetailTextView.setText(Po);
-
-
+        PostItem postItem = arrayList.get(position);
+        holder.homeDetailTextView.setText(postItem.getDetails());
+        holder.homeTimeTextView.setText(postItem.getTime());
+        holder.homeDateTextView.setText(postItem.getDate());
+        holder.homeUserTextView.setText(postItem.getBy_user());
     }
 
 
     @Override
     public int getItemCount() {
-        return 0;
+        return arrayList.size();
     }
 
 
@@ -67,15 +67,21 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
         TextView homeTimeTextView;
         TextView homeDateTextView;
         TextView homeDetailTextView;
+        CircleImageView homeCircularTextView;
+        TextView homeUserTextView;
         HomeClickListener onClickListener;
 
 
-        public HomeViewHolder(View itemView, HomeClickListener onClickListener) {
+        public HomeViewHolder(View itemView, HomeClickListener homeClickListener) {
             super(itemView);
+            itemView.setOnClickListener(this);
             imageView = itemView.findViewById(R.id.home_imageView);
             homeDateTextView = itemView.findViewById(R.id.homedate_textView);
             homeDetailTextView = itemView.findViewById(R.id.homedetail_textView);
             homeTimeTextView = itemView.findViewById(R.id.hometime_textView);
+            homeCircularTextView = itemView.findViewById(R.id.circular_imageView);
+            homeUserTextView = itemView.findViewById(R.id.user_textView);
+            onClickListener = homeClickListener;
         }
 
         @Override
@@ -89,5 +95,6 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
             }
 
         }
+
     }
 }

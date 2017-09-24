@@ -49,7 +49,7 @@ public class Login extends AppCompatActivity {
             finish();
         } else {
 
-            mProgressBar.setVisibility(View.GONE);
+            showProgress(false);
             mAuth = FirebaseAuth.getInstance();
             mLoginButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -124,6 +124,10 @@ public class Login extends AppCompatActivity {
         if (mAuthListener != null) {
             mAuth.removeAuthStateListener(mAuthListener);
         }
+    }
+
+    public void showProgress(boolean status) {
+        mProgressBar.setVisibility(status ? View.VISIBLE : View.GONE);
     }
 
     private void goToMainAcivity() {

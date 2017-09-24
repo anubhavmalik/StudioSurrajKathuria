@@ -6,4 +6,11 @@ package com.example.anubhav.modern.Firebase;
 
 public class RealTimeDatabase {
 
+    public void writetoUsers() {
+
+    }
+
+    public void writeToOneUser(int user_id) {
+
+    }
 }
