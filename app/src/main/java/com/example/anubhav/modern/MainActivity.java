@@ -15,7 +15,7 @@ import com.example.anubhav.modern.Fragments.HomeFragment;
 
 public class MainActivity extends AppCompatActivity {
     HomeFragment homeFragment;
-    HomeFragment catalogFragment;
+    CatalogFragment catalogFragment;
     boolean startup;
 
 
@@ -30,13 +30,11 @@ public class MainActivity extends AppCompatActivity {
 
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    /*TODO:Add fragment here*/
                     setTitle("Home");
                     setFragment(new HomeFragment());
 
                     return true;
                 case R.id.navigation_catalog:
-                    /*TODO:Add fragment here*/
                     setTitle("Catalog");
                     setFragment(new CatalogFragment());
 
@@ -44,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.navigation_profile:
                     /*TODO:Add fragment here*/
                     setTitle("Profile");
+
 
                     return true;
             }
@@ -55,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        homeFragment = new HomeFragment();
+        catalogFragment = new CatalogFragment();
         setContentView(R.layout.activity_main);
         startup = true;
         setFragment(new HomeFragment());
@@ -70,5 +71,6 @@ public class MainActivity extends AppCompatActivity {
         else
             fragmentTransaction.replace(R.id.content, fragment);
         fragmentTransaction.commit();
+        startup = false;
     }
 }
