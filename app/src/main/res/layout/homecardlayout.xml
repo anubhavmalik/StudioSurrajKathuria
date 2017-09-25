@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/home_cardView"
     android:layout_width="match_parent"
     android:layout_height="300dp"
@@ -11,87 +10,83 @@
     app:cardUseCompatPadding="true">
 
     <android.support.constraint.ConstraintLayout
-            android:id="@+id/home_cardLayout"
+        android:id="@+id/home_cardLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/circular_imageView"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="32dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/surrajkathurialogo"
+            app:layout_constraintBottom_toTopOf="@+id/home_imageView"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/user_textView"
+            android:layout_width="109dp"
+            android:layout_height="19dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:text="user here"
+            app:layout_constraintBottom_toTopOf="@+id/home_imageView"
+            app:layout_constraintLeft_toRightOf="@+id/circular_imageView"
+            app:layout_constraintTop_toTopOf="@+id/circular_imageView" />
+
+
+        <ImageView
+            android:id="@+id/home_imageView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="0.08"
+            android:src="@drawable/surrajkathurialogo"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/circular_imageView" />
 
 
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/circular_imageView"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginEnd="6dp"
-                    android:layout_marginLeft="32dp"
-                    android:layout_marginTop="8dp"
-                    android:src="@drawable/surrajkathurialogo"
-                    app:layout_constraintBottom_toTopOf="@+id/home_imageView"
-                    app:layout_constraintLeft_toLeftOf="parent"
-                    app:layout_constraintTop_toTopOf="@id/home_cardLayout" />
-
-                <TextView
-                    android:id="@+id/user_textView"
-                    android:layout_width="109dp"
-                    android:layout_height="19dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginLeft="16dp"
-                    android:layout_marginTop="8dp"
-                    android:text="user here"
-                    app:layout_constraintBottom_toTopOf="@+id/home_imageView"
-                    app:layout_constraintLeft_toRightOf="@+id/circular_imageView"
-                    app:layout_constraintTop_toTopOf="@+id/circular_imageView" />
+        <TextView
+            android:id="@+id/hometime_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_weight="6"
+            android:text="time"
+            app:layout_constraintRight_toRightOf="@+id/home_imageView"
+            app:layout_constraintTop_toBottomOf="@+id/home_imageView" />
 
 
-            <ImageView
-                android:id="@+id/home_imageView"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_weight="0.08"
-                android:src="@drawable/surrajkathurialogo"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/circular_imageView"
-                tools:layout_editor_absoluteY="8dp" />
-
-
-
-
-                <TextView
-                    android:id="@+id/hometime_textView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
-                    android:layout_weight="6"
-                    android:text="time"
-                    app:layout_constraintRight_toRightOf="@+id/home_imageView"
-                    app:layout_constraintTop_toBottomOf="@+id/home_imageView" />
-
-
-            <TextView
-                android:id="@+id/homedetail_textView"
-                android:layout_width="327dp"
-                android:layout_height="59dp"
-                android:layout_marginBottom="1dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="0dp"
-                android:layout_weight="0.06"
-                android:text="This is where we have the awesome post by users."
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHorizontal_bias="0.533"
-                app:layout_constraintLeft_toLeftOf="@+id/home_imageView"
-                app:layout_constraintRight_toRightOf="@+id/home_imageView"
-                app:layout_constraintTop_toBottomOf="@+id/homedate_textView"
-                app:layout_constraintVertical_bias="0.482" />
+        <TextView
+            android:id="@+id/homedetail_textView"
+            android:layout_width="327dp"
+            android:layout_height="59dp"
+            android:layout_marginBottom="1dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_weight="0.06"
+            android:text="This is where we have the awesome post by users."
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.533"
+            app:layout_constraintLeft_toLeftOf="@+id/home_imageView"
+            app:layout_constraintRight_toRightOf="@+id/home_imageView"
+            app:layout_constraintTop_toBottomOf="@+id/homedate_textView"
+            app:layout_constraintVertical_bias="0.482" />
 
         <TextView
             android:id="@+id/homedate_textView"
