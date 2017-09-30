@@ -12,10 +12,14 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.example.anubhav.modern.Constants.IntentConstants;
+import com.example.anubhav.modern.Firebase.RealTimeDatabase;
 import com.example.anubhav.modern.Fragments.CatalogFragment;
 import com.example.anubhav.modern.Fragments.HomeFragment;
 import com.example.anubhav.modern.Models.PostItem;
 import com.example.anubhav.modern.Models.UserItem;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -48,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
 
                     return true;
                 case R.id.navigation_profile:
-                    /*TODO:Add fragment here*/
+//                    TODO:Add fragment here
                     setTitle("Profile");
 
 
@@ -66,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
         catalogFragment = new CatalogFragment();
         setContentView(R.layout.activity_main);
         startup = true;
+//        retrieveFromFirebase(); TODO: THIS FUNCTION SHOULD COPY ARRAY OF POST ITEMS AND THE CURRENT USER DETAILS TO PASS TO FRAGMENT
         getIntent().getStringExtra(IntentConstants.phoneNumberText);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setFragment(new HomeFragment());
@@ -82,5 +87,21 @@ public class MainActivity extends AppCompatActivity {
             fragmentTransaction.replace(R.id.content, fragment);
         fragmentTransaction.commit();
         startup = false;
+    }
+
+    public void retrieveFromFirebase() {
+        RealTimeDatabase database = new RealTimeDatabase();
+        database.getMyPostRef().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                postItemArrayList.clear();
+                dataSnapshot.getValue();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 }
