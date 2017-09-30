@@ -11,13 +11,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
+import com.example.anubhav.modern.Constants.IntentConstants;
 import com.example.anubhav.modern.Fragments.CatalogFragment;
 import com.example.anubhav.modern.Fragments.HomeFragment;
+import com.example.anubhav.modern.Models.PostItem;
+import com.example.anubhav.modern.Models.UserItem;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     HomeFragment homeFragment;
     CatalogFragment catalogFragment;
     boolean startup;
+    ArrayList<PostItem> postItemArrayList;
+    UserItem user;
 
 
     private TextView mTextMessage;
@@ -59,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         catalogFragment = new CatalogFragment();
         setContentView(R.layout.activity_main);
         startup = true;
+        getIntent().getStringExtra(IntentConstants.phoneNumberText);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setFragment(new HomeFragment());
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);

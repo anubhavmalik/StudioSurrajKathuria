@@ -44,6 +44,7 @@ public class HomeFragment extends Fragment {
         homeRecyclerView = v.findViewById(R.id.homefragment_recyclerView);
         postItemArrayList = new ArrayList<>();
         floatingActionButton = v.findViewById(R.id.fab);
+        mainActivity = new MainActivity();
 
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override

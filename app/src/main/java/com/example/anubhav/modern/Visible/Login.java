@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.example.anubhav.modern.Constants.IntentConstants;
 import com.example.anubhav.modern.MainActivity;
 import com.example.anubhav.modern.R;
 import com.google.firebase.FirebaseException;
@@ -139,7 +140,10 @@ public class Login extends AppCompatActivity {
             @Override
             public void run() {
 
-                startActivity(new Intent(Login.this, MainActivity.class));
+                Intent i = new Intent(Login.this, MainActivity.class);
+                i.putExtra(IntentConstants.phoneNumberText, mPhoneEditText.getText().toString());
+                startActivity(i);
+
                 finish();
             }
         }, 1200);
