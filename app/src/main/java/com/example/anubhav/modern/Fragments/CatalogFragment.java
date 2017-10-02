@@ -3,13 +3,15 @@ package com.example.anubhav.modern.Fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.anubhav.modern.Adapters.CatalogRecyclerAdapter;
-import com.example.anubhav.modern.Models.PostItem;
+import com.example.anubhav.modern.Models.CatalogItem;
 import com.example.anubhav.modern.R;
 
 import java.util.ArrayList;
@@ -20,16 +22,28 @@ import java.util.ArrayList;
 
 public class CatalogFragment extends Fragment {
 
-    CatalogRecyclerAdapter mCatalogRecyclerAdapter;
     RecyclerView catalogRecyclerView;
-    ArrayList<PostItem> arrayList;
+    ArrayList<CatalogItem> catalogPostItemarrayList;
+    CatalogRecyclerAdapter catalogRecyclerAdapter;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v=inflater.inflate(R.layout.catalogcardlayout,container,false);
-        v.findViewById(R.id.homefragment_recyclerView);
+        View v = inflater.inflate(R.layout.catalog_recyclerview, container, false);
+        catalogRecyclerView = v.findViewById(R.id.catalog_recyclerViewList);
+        catalogPostItemarrayList = new ArrayList<>();
 
+        for (int i = 0; i < 8; i++) {
+            catalogPostItemarrayList.add(new CatalogItem("Surraj kathuria summer collection is here" + 1, "Summer Collection" + i));
+        }
 
+        catalogRecyclerAdapter = new CatalogRecyclerAdapter(getContext(), catalogPostItemarrayList, new CatalogRecyclerAdapter.CatalogClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Toast.makeText(getContext(), "CatalogItemClicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+        catalogRecyclerView.setAdapter(catalogRecyclerAdapter);
+        catalogRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
 
         return v;
     }

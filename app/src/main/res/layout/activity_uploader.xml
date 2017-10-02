@@ -6,7 +6,7 @@
 
     <EditText
         android:id="@+id/uploader_editText"
-        android:layout_width="368dp"
+        android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
@@ -49,7 +49,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:src="@drawable/personicon"
+        android:src="@drawable/black"
         app:layout_constraintBottom_toTopOf="@+id/uploader_editText"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

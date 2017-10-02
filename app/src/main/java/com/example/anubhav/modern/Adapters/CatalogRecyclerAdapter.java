@@ -8,28 +8,23 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.anubhav.modern.Models.PostItem;
+import com.example.anubhav.modern.Models.CatalogItem;
 import com.example.anubhav.modern.R;
 
 import java.util.ArrayList;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Anubhav on 26-08-2017.
  */
 
-public class CatalogRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class CatalogRecyclerAdapter extends RecyclerView.Adapter<CatalogRecyclerAdapter.CatalogViewHolder> {
     private Context mContext;
-    //    ImageView imageView;
-//    TextView detailTextView;
-//    TextView timeTextView;
-//    TextView dateTextView;
-    private ArrayList<PostItem> arrayList;
-    private HomeRecyclerAdapter.HomeClickListener mClickListener;
+    private ImageView imageView;
+    private ArrayList<CatalogItem> arrayList;
+    private CatalogRecyclerAdapter.CatalogClickListener mClickListener;
 //    PostItem postItem;
 
-    public CatalogRecyclerAdapter(Context mContext, ArrayList<PostItem> arrayList, HomeRecyclerAdapter.HomeClickListener mClickListener) {
+    public CatalogRecyclerAdapter(Context mContext, ArrayList<CatalogItem> arrayList, CatalogRecyclerAdapter.CatalogClickListener mClickListener) {
         this.mContext = mContext;
         this.arrayList = arrayList;
         this.mClickListener = mClickListener;
@@ -38,17 +33,16 @@ public class CatalogRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
 
     @Override
     public CatalogRecyclerAdapter.CatalogViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        android.view.View itemView = LayoutInflater.from(mContext).inflate(R.layout.homecardlayout, parent, false);
+        android.view.View itemView = LayoutInflater.from(mContext).inflate(R.layout.catalogcardlayout, parent, false);
         return new CatalogRecyclerAdapter.CatalogViewHolder(itemView, mClickListener);
     }
 
+
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        PostItem postItem = arrayList.get(position);
-//        holder.homeDetailTextView.setText(postItem.getDetails());
-//        holder.homeTimeTextView.setText(postItem.getTime());
-//        holder.homeDateTextView.setText(postItem.getDate());
-//        holder.homeUserTextView.setText(postItem.getBy_user());
+    public void onBindViewHolder(CatalogViewHolder holder, int position) {
+        CatalogItem catalogItem = arrayList.get(position);
+        holder.catalogDetailTextView.setText(catalogItem.getDetails());
+        holder.catalogUserTextView.setText(catalogItem.getTitle());
     }
 
 
@@ -58,30 +52,24 @@ public class CatalogRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
     }
 
 
-    public interface HomeClickListener {
+    public interface CatalogClickListener {
         void onItemClick(View view, int position);
     }
 
     public static class CatalogViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imageView;
-        TextView homeTimeTextView;
-        TextView homeDateTextView;
-        TextView homeDetailTextView;
-        CircleImageView homeCircularTextView;
-        TextView homeUserTextView;
-        HomeRecyclerAdapter.HomeClickListener onClickListener;
+        TextView catalogDetailTextView;
+        TextView catalogUserTextView;
+        CatalogRecyclerAdapter.CatalogClickListener onClickListener;
 
 
-        public CatalogViewHolder(View itemView, HomeRecyclerAdapter.HomeClickListener homeClickListener) {
+        public CatalogViewHolder(View itemView, CatalogRecyclerAdapter.CatalogClickListener catalogClickListener) {
             super(itemView);
             itemView.setOnClickListener(this);
-            imageView = itemView.findViewById(R.id.home_imageView);
-            homeDateTextView = itemView.findViewById(R.id.homedate_textView);
-            homeDetailTextView = itemView.findViewById(R.id.homedetail_textView);
-            homeTimeTextView = itemView.findViewById(R.id.hometime_textView);
-            homeCircularTextView = itemView.findViewById(R.id.circular_imageView);
-            homeUserTextView = itemView.findViewById(R.id.user_textView);
-            onClickListener = homeClickListener;
+            imageView = itemView.findViewById(R.id.catalog_imageView);
+            catalogDetailTextView = itemView.findViewById(R.id.catalog_detailtextView);
+            catalogUserTextView = itemView.findViewById(R.id.catalog_titletextView);
+            onClickListener = catalogClickListener;
         }
 
         @Override
@@ -89,7 +77,7 @@ public class CatalogRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.Vi
             int id = view.getId();
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
-                if (id == R.id.home_cardLayout) {
+                if (id == R.id.catalog_cardLayout) {
                     onClickListener.onItemClick(view, position);
                 }
             }

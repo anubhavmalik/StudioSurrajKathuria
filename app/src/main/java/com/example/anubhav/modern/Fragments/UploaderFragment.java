@@ -37,4 +37,5 @@ public class UploaderFragment extends Fragment {
 
         return v;
     }
+
 }

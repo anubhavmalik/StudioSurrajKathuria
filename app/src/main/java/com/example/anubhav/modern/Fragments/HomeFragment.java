@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.anubhav.modern.Adapters.HomeRecyclerAdapter;
 import com.example.anubhav.modern.MainActivity;
@@ -40,7 +41,6 @@ public class HomeFragment extends Fragment {
         homeRecyclerView = v.findViewById(R.id.homefragment_recyclerView);
         postItemArrayList = new ArrayList<>();
         floatingActionButton = v.findViewById(R.id.fab);
-        mainActivity = new MainActivity();
 
         final FragmentManager fragmentManager = getFragmentManager();
 
@@ -52,7 +52,7 @@ public class HomeFragment extends Fragment {
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        fragmentManager.beginTransaction().replace(R.id.container, new UploaderFragment()).commit();
+                        fragmentManager.beginTransaction().replace(R.id.content, new UploaderFragment()).commit();
                     }
                 });
                 thread.start();
@@ -60,15 +60,15 @@ public class HomeFragment extends Fragment {
         });
 
 
-//        for (int i = 0; i < 8; i++) {
-//            postItemArrayList.add(new PostItem("date " + i, "Time " + i, "details " + i, "User " + i, null));
-//        }
-//        homeRecyclerAdapter = new HomeRecyclerAdapter(getContext(), postItemArrayList, new HomeRecyclerAdapter.HomeClickListener() {
-//            @Override
-//            public void onItemClick(View view, int position) {
-//                Toast.makeText(getContext(), "Handle the click", Toast.LENGTH_SHORT).show();
-//            }
-//        });
+        for (int i = 0; i < 8; i++) {
+            postItemArrayList.add(new PostItem("date " + i, "Time " + i, "details " + i, "User " + i, null));
+        }
+        homeRecyclerAdapter = new HomeRecyclerAdapter(getContext(), postItemArrayList, new HomeRecyclerAdapter.HomeClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Toast.makeText(getContext(), "Handle the click", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         homeRecyclerView.setAdapter(homeRecyclerAdapter);
         homeRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
