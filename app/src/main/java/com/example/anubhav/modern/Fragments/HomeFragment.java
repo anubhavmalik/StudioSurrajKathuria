@@ -13,9 +13,13 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.anubhav.modern.Adapters.HomeRecyclerAdapter;
-import com.example.anubhav.modern.MainActivity;
 import com.example.anubhav.modern.Models.PostItem;
 import com.example.anubhav.modern.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -29,7 +33,9 @@ public class HomeFragment extends Fragment {
     RecyclerView homeRecyclerView;
     ArrayList<PostItem> postItemArrayList;
     FloatingActionButton floatingActionButton;
-    MainActivity mainActivity;
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference myPostRef;
+    DatabaseReference myUserRef;
 
     public HomeFragment() {
 
@@ -42,6 +48,9 @@ public class HomeFragment extends Fragment {
         homeRecyclerView = v.findViewById(R.id.homefragment_recyclerView);
         postItemArrayList = new ArrayList<>();
         floatingActionButton = v.findViewById(R.id.fab);
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        myPostRef = firebaseDatabase.getReference("Posts");
+        myUserRef = firebaseDatabase.getReference("Users");
 
         final FragmentManager fragmentManager = getFragmentManager();
 
@@ -76,4 +85,24 @@ public class HomeFragment extends Fragment {
 
         return v;
     }
+
+    public void retrieveHomePostFromFirebase() {
+
+        myPostRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                postItemArrayList.clear();
+                for (DataSnapshot postDataSnapshot : dataSnapshot.getChildren()) {
+                    postItemArrayList.add(postDataSnapshot.getValue(PostItem.class));
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getContext(), "Please Check Internet Connection...", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+    }
+
 }
