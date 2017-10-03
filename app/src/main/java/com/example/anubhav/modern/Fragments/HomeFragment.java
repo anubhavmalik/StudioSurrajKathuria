@@ -32,6 +32,7 @@ public class HomeFragment extends Fragment {
     MainActivity mainActivity;
 
     public HomeFragment() {
+
     }
 
     @Nullable

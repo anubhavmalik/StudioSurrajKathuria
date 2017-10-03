@@ -8,10 +8,20 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 
 public class RealTimeDatabase {
+    FirebaseDatabase firebaseDatabase;
+    DatabaseReference myPostRef;
+    DatabaseReference myUserRef;
+    DatabaseReference myCatalogRef;
 
-    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-    DatabaseReference myPostRef = firebaseDatabase.getReference("Posts");
-    DatabaseReference myUserRef = firebaseDatabase.getReference("Users");
+
+    public RealTimeDatabase() {
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        this.myPostRef = firebaseDatabase.getReference("Posts");
+
+        this.myUserRef = firebaseDatabase.getReference("Users");
+
+        this.myCatalogRef = firebaseDatabase.getReference("Catalog");
+    }
 
     public DatabaseReference getMyPostRef() {
         return myPostRef;
@@ -20,4 +30,11 @@ public class RealTimeDatabase {
     public DatabaseReference getMyUserRef() {
         return myUserRef;
     }
+
+    public DatabaseReference getMyCatalogRef() {
+        return myCatalogRef;
+    }
+
+
+
 }

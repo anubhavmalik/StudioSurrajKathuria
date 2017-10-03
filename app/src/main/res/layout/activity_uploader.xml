@@ -13,6 +13,7 @@
         android:layout_marginTop="159dp"
         android:gravity="top"
         android:hint="Enter text here"
+        android:maxLength="200"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

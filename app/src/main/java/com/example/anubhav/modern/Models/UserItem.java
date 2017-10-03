@@ -1,23 +1,29 @@
 package com.example.anubhav.modern.Models;
 
-import android.widget.ImageView;
-import android.widget.TextView;
+import java.io.Serializable;
 
 /**
  * Created by Anubhav on 26-08-2017.
  */
 
-public class UserItem {
-    int user_id;
+public class UserItem implements Serializable {
+    //    int user_id;
     boolean isAdmin;
     String name,phone;
 
-    public int getUser_id() {
-        return user_id;
-    }
+//    public int getUser_id() {
+//        return user_id;
+//    }
 
-    public void setUser_id(int user_id) {
-        this.user_id = user_id;
+//    public void setUser_id(int user_id) {
+//        this.user_id = user_id;
+//    }
+
+    public UserItem(/*int user_id*/ boolean isAdmin, String name, String phone) {
+//        this.user_id = user_id;
+        this.isAdmin = isAdmin;
+        this.name = name;
+        this.phone = phone;
     }
 
     public boolean isAdmin() {
@@ -41,13 +47,6 @@ public class UserItem {
     }
 
     public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public UserItem(int user_id, boolean isAdmin, String name, String phone) {
-        this.user_id = user_id;
-        this.isAdmin = isAdmin;
-        this.name = name;
         this.phone = phone;
     }
 }

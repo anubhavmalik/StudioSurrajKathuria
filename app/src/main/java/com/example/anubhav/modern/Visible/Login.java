@@ -101,10 +101,10 @@ public class Login extends AppCompatActivity {
             @Override
             public void onVerificationFailed(FirebaseException e) {
                 if (e instanceof FirebaseAuthInvalidCredentialsException) {
-                    mLoginButton.setText("Login");
+                    mLoginButton.setText(R.string.login_text);
                     Snackbar.make(mLoginButton, "Invalid User Details", Snackbar.LENGTH_SHORT).show();
                 } else if (e instanceof FirebaseTooManyRequestsException) {
-                    mLoginButton.setText("Login");
+                    mLoginButton.setText(R.string.login_text);
                     Snackbar.make(mLoginButton, "Can't authenticate", Snackbar.LENGTH_LONG);
                 }
                 mProgressBar.setVisibility(View.INVISIBLE);

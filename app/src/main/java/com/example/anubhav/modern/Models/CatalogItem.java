@@ -1,10 +1,12 @@
 package com.example.anubhav.modern.Models;
 
+import java.io.Serializable;
+
 /**
  * Created by Anubhav on 02-10-2017.
  */
 
-public class CatalogItem {
+public class CatalogItem implements Serializable {
     String details;
     String title;
 

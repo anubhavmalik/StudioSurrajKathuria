@@ -1,12 +1,14 @@
 package com.example.anubhav.modern.Models;
 
+import java.io.Serializable;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Anubhav on 26-08-2017.
  */
 
-public class PostItem {
+public class PostItem implements Serializable {
     String date;
     String time;
     String details;

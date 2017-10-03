@@ -2,7 +2,7 @@
     <string name="app_name">Modern</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Catalog</string>
-    <string name="title_notifications">Purchases</string>
+    <string name="title_notifications">Profile</string>
     <string name="title_activity_login">Sign in</string>
 
     <!-- Strings related to login -->
@@ -19,4 +19,5 @@
     </string>
     <string name="enter_your_phone_number">Enter your phone number</string>
     <string name="login">LogIn</string>
+    <string name="login_text">Login</string>
 </resources>
