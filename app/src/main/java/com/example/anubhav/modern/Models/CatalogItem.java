@@ -1,10 +1,13 @@
 package com.example.anubhav.modern.Models;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.io.Serializable;
 
 /**
  * Created by Anubhav on 02-10-2017.
  */
+@IgnoreExtraProperties
 
 public class CatalogItem implements Serializable {
     String details;
@@ -19,7 +22,6 @@ public class CatalogItem implements Serializable {
     }
 
     public String getDetails() {
-
         return details;
     }
 

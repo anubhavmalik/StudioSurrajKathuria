@@ -1,5 +1,7 @@
 package com.example.anubhav.modern.Models;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.io.Serializable;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -7,6 +9,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by Anubhav on 26-08-2017.
  */
+@IgnoreExtraProperties
 
 public class PostItem implements Serializable {
     String date;

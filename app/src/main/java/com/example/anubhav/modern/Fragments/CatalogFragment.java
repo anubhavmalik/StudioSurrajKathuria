@@ -2,6 +2,7 @@ package com.example.anubhav.modern.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,13 +40,17 @@ public class CatalogFragment extends Fragment {
         View v = inflater.inflate(R.layout.catalog_recyclerview, container, false);
         catalogRecyclerView = v.findViewById(R.id.catalog_recyclerViewList);
         catalogPostItemarrayList = new ArrayList<>();
-        myUserRef = firebaseDatabase.getReference("Users");
-        myCatalogRef = firebaseDatabase.getReference("Catalog");
+        firebaseDatabase = FirebaseDatabase.getInstance();
+        myUserRef = firebaseDatabase.getReference().child("Users");
+        myCatalogRef = firebaseDatabase.getReference().child("Catalog");
 
         retrieveCatalogPostFromFirebase();
-        for (int i = 0; i < 8; i++) {
-            catalogPostItemarrayList.add(new CatalogItem("Surraj kathuria summer collection is here" + 1, "Summer Collection" + i));
-        }
+
+//        Log.d("POSTITEM - ",catalogPostItemarrayList.get(0).getDetails());
+//        for (int i = 0; i < 8; i++) {
+//            catalogPostItemarrayList.add(new CatalogItem("Surraj kathuria summer collection is here" + 1, "Summer Collection" + i));
+//        }
+
 
         catalogRecyclerAdapter = new CatalogRecyclerAdapter(getContext(), catalogPostItemarrayList, new CatalogRecyclerAdapter.CatalogClickListener() {
             @Override
@@ -60,11 +65,16 @@ public class CatalogFragment extends Fragment {
     }
 
     public void retrieveCatalogPostFromFirebase() {
-        myCatalogRef.addValueEventListener((new ValueEventListener() {
+        myCatalogRef.addValueEventListener(new ValueEventListener() {
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                for (DataSnapshot uniqueCatalogPost : dataSnapshot.getChildren()) {
-                    catalogPostItemarrayList.add(uniqueCatalogPost.getValue(CatalogItem.class));
+                catalogPostItemarrayList.clear(); //clear existing data
+
+                for (DataSnapshot uniqueCatalogPost : dataSnapshot.getChildren()) { //for populating the arraylist
+                    CatalogItem catalogItem = uniqueCatalogPost.getValue(CatalogItem.class);
+                    catalogPostItemarrayList.add(catalogItem);
+                    catalogRecyclerAdapter.notifyDataSetChanged();
                 }
 
             }
@@ -72,7 +82,8 @@ public class CatalogFragment extends Fragment {
             @Override
             public void onCancelled(DatabaseError databaseError) {
 
+                Snackbar.make(catalogRecyclerView, "Please check your internet connection", Snackbar.LENGTH_LONG);
             }
-        }));
+        });
     }
 }

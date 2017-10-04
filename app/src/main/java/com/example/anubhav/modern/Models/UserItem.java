@@ -1,10 +1,13 @@
 package com.example.anubhav.modern.Models;
 
+import com.google.firebase.database.IgnoreExtraProperties;
+
 import java.io.Serializable;
 
 /**
  * Created by Anubhav on 26-08-2017.
  */
+@IgnoreExtraProperties
 
 public class UserItem implements Serializable {
     //    int user_id;

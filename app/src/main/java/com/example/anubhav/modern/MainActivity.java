@@ -16,6 +16,7 @@ import com.example.anubhav.modern.Fragments.CatalogFragment;
 import com.example.anubhav.modern.Fragments.HomeFragment;
 import com.example.anubhav.modern.Fragments.ProfileFragment;
 import com.example.anubhav.modern.Models.UserItem;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity {
     HomeFragment homeFragment;
@@ -24,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     boolean startup;
     UserItem user;
     String phoneNumber;
+    FirebaseDatabase mFirebaseDatabase;
 
 
     SharedPreferences mSharedPreferences;
@@ -65,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
         startup = true;
+
+        mFirebaseDatabase = FirebaseDatabase.getInstance();
+        mFirebaseDatabase.setPersistenceEnabled(true);
 
         phoneNumber = getIntent().getStringExtra(IntentConstants.phoneNumberText);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
