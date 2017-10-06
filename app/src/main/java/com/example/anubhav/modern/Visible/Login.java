@@ -27,11 +27,11 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import java.util.concurrent.TimeUnit;
 
 public class Login extends AppCompatActivity {
+    public SharedPreferences mloginSharedPreferences, mphoneNumberSharedPreferences;
     ProgressBar mProgressBar;
     String mVerificationId;
     EditText mPhoneEditText;
     Button mLoginButton;
-    SharedPreferences msharedPreferences;
     private String TAG = "Firebase Auth";
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -41,11 +41,12 @@ public class Login extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login2);
-        mPhoneEditText = (EditText) findViewById(R.id.phone_edit_text);
-        mLoginButton = (Button) findViewById(R.id.login_button);
-        mProgressBar = (ProgressBar) findViewById(R.id.progress_bar);
-        msharedPreferences = this.getSharedPreferences("loginState", MODE_PRIVATE);
-        if (msharedPreferences.getBoolean("logged_in", false)) {
+        mPhoneEditText = findViewById(R.id.phone_edit_text);
+        mLoginButton = findViewById(R.id.login_button);
+        mProgressBar = findViewById(R.id.progress_bar);
+        mloginSharedPreferences = this.getSharedPreferences("loginState", MODE_PRIVATE);
+        mphoneNumberSharedPreferences = this.getSharedPreferences("phonenumber", MODE_PRIVATE);
+        if (mloginSharedPreferences.getBoolean("logged_in", false)) {
             goToMainAcivity();
             finish();
         } else {
@@ -86,7 +87,8 @@ public class Login extends AppCompatActivity {
         PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-                msharedPreferences.edit().putBoolean("logged_in", true).apply();
+                mloginSharedPreferences.edit().putBoolean("logged_in", true).apply();
+                mloginSharedPreferences.edit().putString("phone_number", mPhoneEditText.getText().toString()).apply();
                 goToMainAcivity();
             }
 

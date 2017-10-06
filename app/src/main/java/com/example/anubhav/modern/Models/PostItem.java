@@ -4,8 +4,6 @@ import com.google.firebase.database.IgnoreExtraProperties;
 
 import java.io.Serializable;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 /**
  * Created by Anubhav on 26-08-2017.
  */
@@ -16,14 +14,16 @@ public class PostItem implements Serializable {
     String time;
     String details;
     String by_user;
-    CircleImageView circleImageView;
+    String userImageURL;
+    String postImageURL;
 
-    public PostItem(String date, String time, String details, String by_user, CircleImageView circleImageView) {
+    public PostItem(String date, String time, String details, String by_user, String userImageURL, String postImageURL) {
         this.date = date;
         this.time = time;
         this.details = details;
         this.by_user = by_user;
-        this.circleImageView = circleImageView;
+        this.userImageURL = userImageURL;
+        this.postImageURL = postImageURL;
     }
 
     public String getDate() {
@@ -42,7 +42,11 @@ public class PostItem implements Serializable {
         return by_user;
     }
 
-    public CircleImageView getCircleImageView() {
-        return circleImageView;
+    public String getUserImageURL() {
+        return userImageURL;
+    }
+
+    public String getPostImageURL() {
+        return postImageURL;
     }
 }

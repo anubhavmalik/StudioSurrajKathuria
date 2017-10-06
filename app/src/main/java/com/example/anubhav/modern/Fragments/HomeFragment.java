@@ -3,6 +3,7 @@ package com.example.anubhav.modern.Fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -50,7 +51,23 @@ public class HomeFragment extends Fragment {
         floatingActionButton = v.findViewById(R.id.fab);
         firebaseDatabase = FirebaseDatabase.getInstance();
         myPostRef = firebaseDatabase.getReference("Posts");
-        myUserRef = firebaseDatabase.getReference("Users");
+        firebaseDatabase.getReference("Users").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+
+                for (DataSnapshot child : children) {
+                    PostItem postItem = child.getValue(PostItem.class);
+                    postItemArrayList.add(postItem);
+                }
+                homeRecyclerAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Snackbar.make(homeRecyclerView, "Check internet connection", Snackbar.LENGTH_LONG);
+            }
+        });
 
         final FragmentManager fragmentManager = getFragmentManager();
 
@@ -70,9 +87,9 @@ public class HomeFragment extends Fragment {
         });
 
 
-        for (int i = 0; i < 8; i++) {
-            postItemArrayList.add(new PostItem("date " + i, "Time " + i, "details " + i, "User " + i, null));
-        }
+//        for (int i = 0; i < 8; i++) {
+//            postItemArrayList.add(new PostItem("date " + i, "Time " + i, "details " + i, "User " + i, null));
+//        }
         homeRecyclerAdapter = new HomeRecyclerAdapter(getContext(), postItemArrayList, new HomeRecyclerAdapter.HomeClickListener() {
             @Override
             public void onItemClick(View view, int position) {

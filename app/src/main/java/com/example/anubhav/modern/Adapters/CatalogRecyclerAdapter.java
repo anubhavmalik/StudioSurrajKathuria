@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.example.anubhav.modern.Models.CatalogItem;
 import com.example.anubhav.modern.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Anubhav on 26-08-2017.
@@ -20,11 +20,11 @@ import java.util.ArrayList;
 public class CatalogRecyclerAdapter extends RecyclerView.Adapter<CatalogRecyclerAdapter.CatalogViewHolder> {
     private Context mContext;
     private ImageView imageView;
-    private ArrayList<CatalogItem> arrayList;
+    private List<CatalogItem> arrayList;
     private CatalogRecyclerAdapter.CatalogClickListener mClickListener;
 //    PostItem postItem;
 
-    public CatalogRecyclerAdapter(Context mContext, ArrayList<CatalogItem> arrayList, CatalogRecyclerAdapter.CatalogClickListener mClickListener) {
+    public CatalogRecyclerAdapter(Context mContext, List<CatalogItem> arrayList, CatalogRecyclerAdapter.CatalogClickListener mClickListener) {
         this.mContext = mContext;
         this.arrayList = arrayList;
         this.mClickListener = mClickListener;

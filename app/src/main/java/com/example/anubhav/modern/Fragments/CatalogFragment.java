@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Anubhav on 25-08-2017.
@@ -29,7 +30,7 @@ import java.util.ArrayList;
 public class CatalogFragment extends Fragment {
 
     RecyclerView catalogRecyclerView;
-    ArrayList<CatalogItem> catalogPostItemarrayList;
+    List<CatalogItem> catalogPostItemarrayList;
     CatalogRecyclerAdapter catalogRecyclerAdapter;
     DatabaseReference myUserRef;
     FirebaseDatabase firebaseDatabase;
@@ -42,9 +43,30 @@ public class CatalogFragment extends Fragment {
         catalogPostItemarrayList = new ArrayList<>();
         firebaseDatabase = FirebaseDatabase.getInstance();
         myUserRef = firebaseDatabase.getReference().child("Users");
-        myCatalogRef = firebaseDatabase.getReference().child("Catalog");
+        /*myCatalogRef* =*/
+        firebaseDatabase.getReference().child("Catalog").addValueEventListener(new ValueEventListener() {
 
-        retrieveCatalogPostFromFirebase();
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                catalogPostItemarrayList.clear(); //clear existing data
+                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
+
+                for (DataSnapshot uniqueCatalogPost : children) { //for populating the arraylist
+                    CatalogItem catalogItem = uniqueCatalogPost.getValue(CatalogItem.class);
+                    catalogPostItemarrayList.add(catalogItem);
+                    catalogRecyclerAdapter.notifyDataSetChanged();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+                Snackbar.make(catalogRecyclerView, "Please check your internet connection", Snackbar.LENGTH_LONG);
+            }
+        });
+
+//        retrieveCatalogPostFromFirebase();
 
 //        Log.d("POSTITEM - ",catalogPostItemarrayList.get(0).getDetails());
 //        for (int i = 0; i < 8; i++) {
