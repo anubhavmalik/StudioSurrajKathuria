@@ -14,16 +14,19 @@ public class PostItem implements Serializable {
     String time;
     String details;
     String by_user;
-    String userImageURL;
-    String postImageURL;
+    String user_ImageURL;
+    String post_ImageURL;
 
-    public PostItem(String date, String time, String details, String by_user, String userImageURL, String postImageURL) {
+    public PostItem() {
+    }
+
+    public PostItem(String date, String time, String details, String by_user, String user_ImageURL, String post_ImageURL) {
         this.date = date;
         this.time = time;
         this.details = details;
         this.by_user = by_user;
-        this.userImageURL = userImageURL;
-        this.postImageURL = postImageURL;
+        this.user_ImageURL = user_ImageURL;
+        this.post_ImageURL = post_ImageURL;
     }
 
     public String getDate() {
@@ -43,10 +46,10 @@ public class PostItem implements Serializable {
     }
 
     public String getUserImageURL() {
-        return userImageURL;
+        return user_ImageURL;
     }
 
     public String getPostImageURL() {
-        return postImageURL;
+        return post_ImageURL;
     }
 }

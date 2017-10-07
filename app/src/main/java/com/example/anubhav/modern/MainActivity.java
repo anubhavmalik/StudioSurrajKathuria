@@ -8,19 +8,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.anubhav.modern.Constants.IntentConstants;
 import com.example.anubhav.modern.Fragments.CatalogFragment;
 import com.example.anubhav.modern.Fragments.HomeFragment;
 import com.example.anubhav.modern.Fragments.ProfileFragment;
 import com.example.anubhav.modern.Models.PostItem;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
+import com.example.anubhav.modern.Models.UserItem;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 import java.util.ArrayList;
 
@@ -30,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     ProfileFragment profileFragment;
     boolean startup;
     String phoneNumber;
+    UserItem user;
     ArrayList<PostItem> homePostsArrayList;
     FirebaseFirestore db;
 
@@ -73,9 +72,24 @@ public class MainActivity extends AppCompatActivity {
         startup = true;
         homePostsArrayList = new ArrayList<>();
         db = FirebaseFirestore.getInstance();
-
-        getHomePosts();
-
+        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .build();
+        db.setFirestoreSettings(settings);
+//        db.collection("homeposts").addSnapshotListener(new EventListener<QuerySnapshot>() {
+//            @Override
+//            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+//                if(e!=null){
+//                    Log.e("PERSISTENCE ERROR",e.getMessage());
+//                    return;
+//                }
+//                for(DocumentChange document : documentSnapshots.getDocumentChanges()){
+//                    homePostsArrayList.add(document.getDocument().toObject(PostItem.class));
+//                    Log.i("ARRAYVALUECACHE", document.getDocument().toObject(PostItem.class).getDetails());
+//
+//                }
+//            }
+//        });
 
         phoneNumber = getIntent().getStringExtra(IntentConstants.phoneNumberText);
 
@@ -86,7 +100,10 @@ public class MainActivity extends AppCompatActivity {
         catalogFragment = new CatalogFragment();
         profileFragment = new ProfileFragment();
 
+//        getHomePosts();
+//        if(fetchUserIfExists()){
         setFragment(homeFragment);
+//        }
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
@@ -102,22 +119,33 @@ public class MainActivity extends AppCompatActivity {
         startup = false;
     }
 
-    public void getHomePosts() {
-        db.collection("homeposts")
-                .get()
-                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                        if (task.isSuccessful()) {
-                            homePostsArrayList.clear();
+//    public void getHomePosts() {
+//        db.collection("homeposts")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            homePostsArrayList.clear();
+//
+//                            for (DocumentSnapshot document : task.getResult()) {
+//                                homePostsArrayList.add(document.toObject(PostItem.class));
+//                                Log.i("ARRAYVALUE", document.toObject(PostItem.class).getDetails());
+//                            }
+//                        }
+//                    }
+//                });
+//    }
 
-                            for (DocumentSnapshot document : task.getResult()) {
-                                homePostsArrayList.add(document.toObject(PostItem.class));
-                                Log.d("ARRAYVALUE", document.toObject(PostItem.class).getDetails());
-                            }
-                        }
-                    }
-                });
+    public boolean fetchUserIfExists() {
+        if (db.collection("homeposts").document().equals(phoneNumber)) {
+            return true;
+        } else {
+            Toast.makeText(this, "Please update your details first", Toast.LENGTH_SHORT).show();
+            setFragment(profileFragment);
+            return false;
+        }
+
     }
 
 }

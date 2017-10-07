@@ -10,11 +10,15 @@ import java.io.Serializable;
 @IgnoreExtraProperties
 
 public class CatalogItem implements Serializable {
+    String catalog_imageURL;
     String details;
     String title;
 
+    public CatalogItem() {
+    }
 
-    public CatalogItem(String details, String title) {
+    public CatalogItem(String catalog_imageURL, String details, String title) {
+        this.catalog_imageURL = catalog_imageURL;
         this.details = details;
         this.title = title;
 
@@ -35,5 +39,9 @@ public class CatalogItem implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getCatalog_imageURL() {
+        return catalog_imageURL;
     }
 }
