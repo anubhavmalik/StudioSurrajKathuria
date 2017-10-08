@@ -7,15 +7,19 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
+import com.example.anubhav.modern.Constants.ApplicationConstants;
 import com.example.anubhav.modern.Constants.IntentConstants;
 import com.example.anubhav.modern.MainActivity;
 import com.example.anubhav.modern.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.FirebaseAuth;
@@ -23,16 +27,19 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.concurrent.TimeUnit;
 
 public class Login extends AppCompatActivity {
-    public SharedPreferences mloginSharedPreferences, mphoneNumberSharedPreferences;
+    public SharedPreferences mLoginSharedPreferences, mPhoneNumberSharedPreferences, mFirstLoginSharedPreference;
     ProgressBar mProgressBar;
     String mVerificationId;
     EditText mPhoneEditText;
     Button mLoginButton;
-    private String TAG = "Firebase Auth";
+    FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
@@ -44,9 +51,17 @@ public class Login extends AppCompatActivity {
         mPhoneEditText = findViewById(R.id.phone_edit_text);
         mLoginButton = findViewById(R.id.login_button);
         mProgressBar = findViewById(R.id.progress_bar);
-        mloginSharedPreferences = this.getSharedPreferences("loginState", MODE_PRIVATE);
-        mphoneNumberSharedPreferences = this.getSharedPreferences("phonenumber", MODE_PRIVATE);
-        if (mloginSharedPreferences.getBoolean("logged_in", false)) {
+        mLoginSharedPreferences = this.getSharedPreferences(ApplicationConstants.loginStatePreferencesName, MODE_PRIVATE);
+        mPhoneNumberSharedPreferences = this.getSharedPreferences(ApplicationConstants.phonePreferencesName, MODE_PRIVATE);
+        mFirstLoginSharedPreference = this.getSharedPreferences(ApplicationConstants.firstLoginSharedPreferencesName, MODE_PRIVATE);
+
+//        if(mFirstLoginSharedPreference.getBoolean(ApplicationConstants.firstLogin,true)){
+//            fetchUserIfExists();
+//        }
+
+
+        db = FirebaseFirestore.getInstance();
+        if (mLoginSharedPreferences.getBoolean("logged_in", false)) {
             goToMainAcivity();
             finish();
         } else {
@@ -72,7 +87,7 @@ public class Login extends AppCompatActivity {
                     FirebaseUser user = firebaseAuth.getCurrentUser();
                     if (user != null) {
                         goToMainAcivity();
-                        Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+//                        Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                     } else {
                         Snackbar.make(mLoginButton, "Sign in to continue", Snackbar.LENGTH_LONG).show();
                     }
@@ -87,9 +102,12 @@ public class Login extends AppCompatActivity {
         PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-                mloginSharedPreferences.edit().putBoolean("logged_in", true).apply();
-                mloginSharedPreferences.edit().putString("phone_number", mPhoneEditText.getText().toString()).apply();
+                mLoginSharedPreferences.edit().putBoolean(ApplicationConstants.loginState, true).apply();
+                mFirstLoginSharedPreference.edit().putBoolean(ApplicationConstants.firstLogin, true).apply();
+                mLoginSharedPreferences.edit().putString(ApplicationConstants.phoneNumber, mPhoneEditText.getText().toString()).apply();
+
                 goToMainAcivity();
+//                fetchUserIfExists();
             }
 
             @Override
@@ -135,8 +153,8 @@ public class Login extends AppCompatActivity {
 
     private void goToMainAcivity() {
         Snackbar.make(mLoginButton, "Welcome", Snackbar.LENGTH_SHORT).show();
-        if(mProgressBar.isShown())
-        mProgressBar.setVisibility(View.INVISIBLE);
+        if (mProgressBar.isShown())
+            mProgressBar.setVisibility(View.INVISIBLE);
         Handler h = new Handler();
         h.postDelayed(new Runnable() {
             @Override
@@ -149,6 +167,37 @@ public class Login extends AppCompatActivity {
                 finish();
             }
         }, 1200);
+
+    }
+
+    public void fetchUserIfExists() {
+
+        if (mPhoneNumberSharedPreferences.getString(ApplicationConstants.phoneNumber, null) == null) {
+            return;
+        } else {
+
+            DocumentReference docRef = db.collection("users").document(mPhoneNumberSharedPreferences.getString(ApplicationConstants.phoneNumber, "123points_mock"));
+            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot snapshot = task.getResult();
+                        if (snapshot == null) {
+                            startActivity(new Intent(Login.this, GetDetailsActivity.class));
+                            finish();
+                        } else {
+                            goToMainAcivity();
+                        }
+                    }
+                }
+            })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(Login.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
 
     }
 }

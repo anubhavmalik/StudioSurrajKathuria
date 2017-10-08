@@ -10,46 +10,21 @@ import java.io.Serializable;
 @IgnoreExtraProperties
 
 public class UserItem implements Serializable {
-    //    int user_id;
-    boolean isAdmin;
-    String name,phone;
 
-//    public int getUser_id() {
-//        return user_id;
-//    }
+    String name, photourl;
 
-//    public void setUser_id(int user_id) {
-//        this.user_id = user_id;
-//    }
 
-    public UserItem(/*int user_id*/ boolean isAdmin, String name, String phone) {
-//        this.user_id = user_id;
-        this.isAdmin = isAdmin;
+    public UserItem(/*int user_id boolean isAdmin,*/ String name, String photourl) {
         this.name = name;
-        this.phone = phone;
-    }
-
-    public boolean isAdmin() {
-        return isAdmin;
-    }
-
-    public void setAdmin(boolean admin) {
-        isAdmin = admin;
+        this.photourl = photourl;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getPhotourl() {
+        return photourl;
     }
 
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
 }

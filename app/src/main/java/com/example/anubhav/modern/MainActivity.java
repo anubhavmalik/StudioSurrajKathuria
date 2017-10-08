@@ -1,5 +1,6 @@
 package com.example.anubhav.modern;
 
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -17,12 +18,19 @@ import com.example.anubhav.modern.Fragments.HomeFragment;
 import com.example.anubhav.modern.Fragments.ProfileFragment;
 import com.example.anubhav.modern.Models.PostItem;
 import com.example.anubhav.modern.Models.UserItem;
+import com.example.anubhav.modern.Visible.GetDetailsActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
+    final int getDetailRequest = 140;
     HomeFragment homeFragment;
     CatalogFragment catalogFragment;
     ProfileFragment profileFragment;
@@ -101,11 +109,20 @@ public class MainActivity extends AppCompatActivity {
         profileFragment = new ProfileFragment();
 
 //        getHomePosts();
-//        if(fetchUserIfExists()){
-        setFragment(homeFragment);
+//        if (fetchUserIfExists()) {
+        setFragment(catalogFragment);
+//        } else {
+//            startActivityForResult(new Intent(MainActivity.this, GetDetailsActivity.class), getDetailRequest);
 //        }
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == getDetailRequest && resultCode == RESULT_OK) {
+            setFragment(homeFragment);
+        }
     }
 
     public void setFragment(Fragment fragment) {
@@ -137,15 +154,29 @@ public class MainActivity extends AppCompatActivity {
 //                });
 //    }
 
-    public boolean fetchUserIfExists() {
-        if (db.collection("homeposts").document().equals(phoneNumber)) {
-            return true;
-        } else {
-            Toast.makeText(this, "Please update your details first", Toast.LENGTH_SHORT).show();
-            setFragment(profileFragment);
-            return false;
-        }
+    public void fetchUserIfExists() {
+        DocumentReference docRef = db.collection("users").document(phoneNumber);
+        docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()) {
+                    DocumentSnapshot snapshot = task.getResult();
+                    if (snapshot == null) {
+                        startActivity(new Intent(MainActivity.this, GetDetailsActivity.class));
+                        finish();
+                    } else {
+                        setFragment(catalogFragment);
+                    }
+                }
+            }
+        })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(MainActivity.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
 
     }
-
 }

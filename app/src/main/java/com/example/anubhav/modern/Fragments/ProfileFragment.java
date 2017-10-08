@@ -52,9 +52,9 @@ public class ProfileFragment extends Fragment {
                 if (i == 0) {
                     //TODO : Layout for REACH US
                 } else if (i == 1) {
-                    //TODO: Layout for about surraj kathuria
+                    //TODO: Layout for about Surraj Kathuria
                 } else if (i == 2) {
-                    //TODO: Layout for about vimmi kathuria
+                    //TODO: Layout for about Vimmi Kathuria
                 }
             }
         });
