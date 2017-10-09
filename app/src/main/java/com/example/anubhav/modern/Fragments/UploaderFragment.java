@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,17 +21,14 @@ import com.bumptech.glide.Glide;
 import com.example.anubhav.modern.Constants.ApplicationConstants;
 import com.example.anubhav.modern.Models.PostItem;
 import com.example.anubhav.modern.R;
-import com.example.anubhav.modern.Visible.Login;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.victor.loading.newton.NewtonCradleLoading;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -49,23 +48,28 @@ public class UploaderFragment extends Fragment {
     FloatingActionButton uploaderFab;
     ImageView mPhotoPickerButton;
     TextView nameTextView;
-    FirebaseStorage mFirebaseStorage;
     CircleImageView circleImageView;
     Uri selectedImageUri;
     FirebaseFirestore db;
-    StorageReference homeReference;
-    DatabaseReference mPostReference;
+    StorageReference homeStorageReference;
     SharedPreferences mPhoneNumberPreference;
+    NewtonCradleLoading newtonCradleLoading;
+
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
         if (requestCode == RC_PHOTO_PICKER) {
             if (resultCode == RESULT_OK) {
                 selectedImageUri = data.getData();
                 mPhotoPickerButton.setImageURI(selectedImageUri);
+                super.onActivityResult(requestCode, resultCode, data);
+
             }
         }
     }
+
 
     @Nullable
     @Override
@@ -76,53 +80,20 @@ public class UploaderFragment extends Fragment {
         uploaderFab = v.findViewById(R.id.uploader_fab);
         nameTextView = v.findViewById(R.id.uploader_nameTextView);
         mPhotoPickerButton = v.findViewById(R.id.uploader_imageView);
-        mPhoneNumberPreference = this.getActivity().getSharedPreferences(ApplicationConstants.phonePreferencesName, MODE_PRIVATE);
-        final String phoneNumber = mPhoneNumberPreference.getString(ApplicationConstants.phoneNumber, "123488535");
-        db = FirebaseFirestore.getInstance();
-        FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
-                .setPersistenceEnabled(true)
-                .build();
-        db.setFirestoreSettings(settings);
-//        Task<DocumentSnapshot> task = db.collection("users").document(phoneNumber).get();
-//        Glide.with(UploaderFragment.this)
-//                .load(task.getResult().toObject(UserItem.class).getPhotourl())
-//                .into(circleImageView);
+        mPhoneNumberPreference = this.getActivity().getSharedPreferences(ApplicationConstants.loginStatePreferencesName, MODE_PRIVATE);
+
+        newtonCradleLoading = v.findViewById(R.id.newton_cradle);
+        newtonCradleLoading.setLoadingColor(R.color.colorPrimaryDark);
+        showProgress(false);
+
+        nameTextView.setText(mPhoneNumberPreference.getString(ApplicationConstants.userName, null));
+
+        Glide.with(UploaderFragment.this)
+                .load(mPhoneNumberPreference.getString(ApplicationConstants.userPhotoUrl, null))
+                .into(circleImageView);
 
 
-        db.collection("users").document(phoneNumber).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-                if (e != null) {
-                    Toast.makeText(getContext(), "Some Error Occurred", Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                Glide.with(UploaderFragment.this)
-                        .load("gs://modern-9526d.appspot.com/homeimagesheresurrajkathuriaphotosfirebasestorage/image:155928")
-//                        .load(documentSnapshot.toObject(UserItem.class).getPhotourl())
-                        .into(circleImageView);
-
-            }
-
-        });
-
-//              .addSnapshotListener(new EventListener<QuerySnapshot>() {
-//            @Override
-//            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-//                if(e!=null){
-//                    Toast.makeText(getContext(), "Some Error Occurred", Toast.LENGTH_SHORT).show();
-//                    return;
-//                }
-//                for(DocumentChange change : documentSnapshots.getDocumentChanges()){
-//                    Glide.with(UploaderFragment.this)
-//                                .load(change.getDocument().toObject(UserItem.class).getPhotourl())
-//                                .into(circleImageView);
-//                    }
-//                }
-//        });
-
-
-        homeReference = FirebaseStorage.getInstance().getReference().child(getString(R.string.homeImageStorage));
+        homeStorageReference = FirebaseStorage.getInstance().getReference().child(getString(R.string.homeImageStorage));
         uploaderFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -130,25 +101,39 @@ public class UploaderFragment extends Fragment {
                     detailsEditText.setError("You need to write something");
                 } else if (selectedImageUri == null) {
                     Toast.makeText(getContext(), "No Image Selected", Toast.LENGTH_SHORT).show();
-                } else {//TODO: ADD DATABASE UPLOADING CODE HERE
-
-
-                    StorageReference photoRef = homeReference.child(selectedImageUri.getLastPathSegment());
+                } else {
+                    Snackbar.make(mPhotoPickerButton, "Posting...", Snackbar.LENGTH_INDEFINITE).show();
+                    showProgress(true);
+                    newtonCradleLoading.start();
+                    StorageReference photoRef = homeStorageReference.child(selectedImageUri.getLastPathSegment());
 
                     photoRef.putFile(selectedImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             Uri url = taskSnapshot.getDownloadUrl();
+                            db = FirebaseFirestore.getInstance();
 
                             String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
                             PostItem postItem = new PostItem(currentDateTimeString.toString().substring(0, 11),
                                     currentDateTimeString.toString().substring(12, 16) + " " + currentDateTimeString.toString().substring(20, 22),
                                     detailsEditText.getText().toString(),
-                                    new Login().mPhoneNumberSharedPreferences.getString("phone_number", null),
-                                    null,
+                                    mPhoneNumberPreference.getString(ApplicationConstants.userName, null),
+                                    mPhoneNumberPreference.getString(ApplicationConstants.userPhotoUrl, null),
                                     url.toString());
-
-
+                            db.collection("homeposts").add(postItem).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                @Override
+                                public void onSuccess(DocumentReference documentReference) {
+                                    showProgress(false);
+                                    Snackbar.make(mPhotoPickerButton, "You Posted Successfully", Snackbar.LENGTH_SHORT).show();
+                                }
+                            })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            showProgress(false);
+                                            Snackbar.make(mPhotoPickerButton, "Oops! Something went wrong.", Snackbar.LENGTH_SHORT).show();
+                                        }
+                                    });
                         }
                     });
                 }
@@ -162,10 +147,17 @@ public class UploaderFragment extends Fragment {
                 intent.setType("image/jpeg");
                 intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
                 startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
+
             }
         });
 
+
         return v;
     }
+
+    private void showProgress(boolean status) {
+        newtonCradleLoading.setVisibility(status ? View.VISIBLE : View.GONE);
+    }
+
 
 }

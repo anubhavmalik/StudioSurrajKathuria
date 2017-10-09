@@ -2,6 +2,7 @@ package com.example.anubhav.modern.Visible;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -17,9 +18,6 @@ import com.example.anubhav.modern.Constants.ApplicationConstants;
 import com.example.anubhav.modern.Constants.IntentConstants;
 import com.example.anubhav.modern.MainActivity;
 import com.example.anubhav.modern.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,19 +25,15 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.concurrent.TimeUnit;
 
 public class Login extends AppCompatActivity {
-    public SharedPreferences mLoginSharedPreferences, mPhoneNumberSharedPreferences, mFirstLoginSharedPreference;
+    public SharedPreferences mLoginSharedPreferences;//, mPhoneNumberSharedPreferences, mFirstLoginSharedPreference;
     ProgressBar mProgressBar;
     String mVerificationId;
     EditText mPhoneEditText;
     Button mLoginButton;
-    FirebaseFirestore db;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
@@ -51,17 +45,16 @@ public class Login extends AppCompatActivity {
         mPhoneEditText = findViewById(R.id.phone_edit_text);
         mLoginButton = findViewById(R.id.login_button);
         mProgressBar = findViewById(R.id.progress_bar);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         mLoginSharedPreferences = this.getSharedPreferences(ApplicationConstants.loginStatePreferencesName, MODE_PRIVATE);
-        mPhoneNumberSharedPreferences = this.getSharedPreferences(ApplicationConstants.phonePreferencesName, MODE_PRIVATE);
-        mFirstLoginSharedPreference = this.getSharedPreferences(ApplicationConstants.firstLoginSharedPreferencesName, MODE_PRIVATE);
+
 
 //        if(mFirstLoginSharedPreference.getBoolean(ApplicationConstants.firstLogin,true)){
 //            fetchUserIfExists();
 //        }
 
 
-        db = FirebaseFirestore.getInstance();
-        if (mLoginSharedPreferences.getBoolean("logged_in", false)) {
+        if (mLoginSharedPreferences.getBoolean(ApplicationConstants.loginState, false)) {
             goToMainAcivity();
             finish();
         } else {
@@ -73,9 +66,9 @@ public class Login extends AppCompatActivity {
                 public void onClick(View view) {
                     if (mPhoneEditText.getText().toString().length() != 10) {
                         mPhoneEditText.setError("Invalid Number");
-//                        Log.d(TAG, "onClick: " + mPhoneEditText.getText().toString().length());
                     } else {
                         mProgressBar.setVisibility(View.VISIBLE);
+                        mLoginButton.setText("Sending OTP ...");
                         verifyPhone();
                     }
                 }
@@ -87,7 +80,6 @@ public class Login extends AppCompatActivity {
                     FirebaseUser user = firebaseAuth.getCurrentUser();
                     if (user != null) {
                         goToMainAcivity();
-//                        Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
                     } else {
                         Snackbar.make(mLoginButton, "Sign in to continue", Snackbar.LENGTH_LONG).show();
                     }
@@ -102,12 +94,9 @@ public class Login extends AppCompatActivity {
         PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
-                mLoginSharedPreferences.edit().putBoolean(ApplicationConstants.loginState, true).apply();
-                mFirstLoginSharedPreference.edit().putBoolean(ApplicationConstants.firstLogin, true).apply();
                 mLoginSharedPreferences.edit().putString(ApplicationConstants.phoneNumber, mPhoneEditText.getText().toString()).apply();
 
-                goToMainAcivity();
-//                fetchUserIfExists();
+                startActivity(new Intent(Login.this, GetDetailsActivity.class));
             }
 
             @Override
@@ -120,12 +109,16 @@ public class Login extends AppCompatActivity {
 
             @Override
             public void onVerificationFailed(FirebaseException e) {
-                if (e instanceof FirebaseAuthInvalidCredentialsException) {
-                    mLoginButton.setText(R.string.login_text);
-                    Snackbar.make(mLoginButton, "Invalid User Details", Snackbar.LENGTH_SHORT).show();
-                } else if (e instanceof FirebaseTooManyRequestsException) {
-                    mLoginButton.setText(R.string.login_text);
-                    Snackbar.make(mLoginButton, "Can't authenticate", Snackbar.LENGTH_LONG);
+                try {
+                    if (e instanceof FirebaseAuthInvalidCredentialsException) {
+                        mLoginButton.setText(R.string.login_text);
+                        Snackbar.make(mLoginButton, "Invalid User Details", Snackbar.LENGTH_SHORT).show();
+                    } else if (e instanceof FirebaseTooManyRequestsException) {
+                        mLoginButton.setText(R.string.login_text);
+                        Snackbar.make(mLoginButton, "Can't authenticate", Snackbar.LENGTH_LONG);
+                    }
+                } catch (Exception ex) {
+                    Toast.makeText(Login.this, "Try Again", Toast.LENGTH_SHORT).show();
                 }
                 mProgressBar.setVisibility(View.INVISIBLE);
             }
@@ -170,34 +163,5 @@ public class Login extends AppCompatActivity {
 
     }
 
-    public void fetchUserIfExists() {
 
-        if (mPhoneNumberSharedPreferences.getString(ApplicationConstants.phoneNumber, null) == null) {
-            return;
-        } else {
-
-            DocumentReference docRef = db.collection("users").document(mPhoneNumberSharedPreferences.getString(ApplicationConstants.phoneNumber, "123points_mock"));
-            docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot snapshot = task.getResult();
-                        if (snapshot == null) {
-                            startActivity(new Intent(Login.this, GetDetailsActivity.class));
-                            finish();
-                        } else {
-                            goToMainAcivity();
-                        }
-                    }
-                }
-            })
-                    .addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(Login.this, "Please check your internet connection", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-        }
-
-    }
 }

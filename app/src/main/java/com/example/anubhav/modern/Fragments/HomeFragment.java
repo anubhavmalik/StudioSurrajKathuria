@@ -34,15 +34,12 @@ import java.util.ArrayList;
  */
 
 public class HomeFragment extends Fragment {
-    final int uploadRequest = 90;
     HomeRecyclerAdapter homeRecyclerAdapter;
     RecyclerView homeRecyclerView;
     ArrayList<PostItem> homePostsArrayList;
     FloatingActionButton floatingActionButton;
     FirebaseFirestore db;
-//    FirebaseDatabase firebaseDatabase;
-//    DatabaseReference myPostRef;
-//    DatabaseReference myUserRef;
+
 
     public HomeFragment() {
 
@@ -69,31 +66,11 @@ public class HomeFragment extends Fragment {
                 }
                 for (DocumentChange document : documentSnapshots.getDocumentChanges()) {
                     homePostsArrayList.add(document.getDocument().toObject(PostItem.class));
-                    Log.i("ARRAYVALUECACHE", document.getDocument().toObject(PostItem.class).getDetails());
                     homeRecyclerAdapter.notifyDataSetChanged();
                 }
             }
         });
         getHomePosts();
-//        firebaseDatabase = FirebaseDatabase.getInstance();
-//        myPostRef = firebaseDatabase.getReference("Posts");
-//        firebaseDatabase.getReference("Users").addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-//
-//                for (DataSnapshot child : children) {
-//                    PostItem postItem = child.getValue(PostItem.class);
-//                    homePostsArrayList.add(postItem);
-//                }
-//                homeRecyclerAdapter.notifyDataSetChanged();
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                Snackbar.make(homeRecyclerView, "Check internet connection", Snackbar.LENGTH_LONG);
-//            }
-//        });
 
         final FragmentManager fragmentManager = getFragmentManager();
 
@@ -101,7 +78,6 @@ public class HomeFragment extends Fragment {
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onDestroy();
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -113,9 +89,6 @@ public class HomeFragment extends Fragment {
         });
 
 
-//        for (int i = 0; i < 8; i++) {
-//            homePostsArrayList.add(new PostItem("date " + i, "Time " + i, "details " + i, "User " + i, null));
-//        }
         homeRecyclerAdapter = new HomeRecyclerAdapter(getContext(), homePostsArrayList, new HomeRecyclerAdapter.HomeClickListener() {
             @Override
             public void onItemClick(View view, int position) {
@@ -148,23 +121,5 @@ public class HomeFragment extends Fragment {
                     }
                 });
     }
-//    public void retrieveHomePostFromFirebase() {
-//
-//        myPostRef.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                homePostsArrayList.clear();
-//                for (DataSnapshot postDataSnapshot : dataSnapshot.getChildren()) {
-//                    homePostsArrayList.add(postDataSnapshot.getValue(PostItem.class));
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                Toast.makeText(getContext(), "Please Check Internet Connection...", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-//
-//    }
 
 }

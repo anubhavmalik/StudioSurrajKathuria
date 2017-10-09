@@ -22,4 +22,5 @@
     <string name="login_text">Login</string>
     <string name="homeStorageFolder">homeimagesheresurrajkathuriaphotosfirebasestorage</string>
     <string name="homeImageStorage">homeimagesheresurrajkathuriaphotosfirebasestorage</string>
+    <string name="userStorage">userimagesforsurrajkathuriaappherefirebasestorage</string>
 </resources>

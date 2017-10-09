@@ -6,10 +6,12 @@
 
     <EditText
         android:id="@+id/uploader_editText"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="100dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="159dp"
         android:gravity="top"
         android:hint="Enter text here"
@@ -24,18 +26,34 @@
         android:layout_width="50dp"
         android:layout_height="44dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginStart="8dp"
         android:src="@drawable/image_icon"
         app:layout_constraintLeft_toLeftOf="@+id/uploader_editText"
         app:layout_constraintTop_toBottomOf="@+id/uploader_editText" />
+
+    <com.victor.loading.newton.NewtonCradleLoading
+        android:id="@+id/newton_cradle"
+        android:layout_width="0dp"
+        android:layout_height="143dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@+id/uploader_imageView"
+        app:layout_constraintRight_toLeftOf="@+id/uploader_fab"
+        app:layout_constraintTop_toBottomOf="@+id/uploader_editText">
+
+    </com.victor.loading.newton.NewtonCradleLoading>
 
     <TextView
         android:id="@+id/uploader_nameTextView"
         android:layout_width="208dp"
         android:layout_height="24dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="0dp"
+        android:layout_marginStart="8dp"
         android:gravity="center"
         android:text="Name"
         app:layout_constraintLeft_toLeftOf="@+id/uploader_circleImageView"
@@ -47,8 +65,10 @@
         android:layout_width="75dp"
         android:layout_height="63dp"
         android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:src="@drawable/black"
         app:layout_constraintBottom_toTopOf="@+id/uploader_editText"
@@ -61,8 +81,8 @@
         android:id="@+id/uploader_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginTop="0dp"
         android:src="@drawable/tick_round"
         app:layout_constraintRight_toRightOf="@+id/uploader_editText"
         app:layout_constraintTop_toBottomOf="@+id/uploader_editText" />
