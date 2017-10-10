@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/home_cardView"
     android:layout_width="match_parent"
-    android:layout_height="320dp"
+    android:layout_height="420dp"
     android:orientation="vertical"
     app:cardElevation="5dp"
     app:cardPreventCornerOverlap="true"
@@ -37,20 +37,33 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:text="user here"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/home_imageView"
             app:layout_constraintLeft_toRightOf="@+id/circular_imageView"
             app:layout_constraintTop_toTopOf="@+id/circular_imageView" />
 
+        <ProgressBar
+            android:id="@+id/home_imageprogress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/home_imageView"
+            app:layout_constraintLeft_toLeftOf="@+id/home_imageView"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/home_imageView" />
 
         <ImageView
             android:id="@+id/home_imageView"
             android:layout_width="0dp"
-            android:layout_height="150dp"
+            android:layout_height="240dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="6dp"
+            android:layout_marginTop="10dp"
             android:scaleType="centerCrop"
             android:src="@drawable/surrajkathurialogo"
             app:layout_constraintHorizontal_bias="0.0"
@@ -61,18 +74,20 @@
 
         <TextView
             android:id="@+id/hometime_textView"
-            android:layout_width="80dp"
-            android:layout_height="wrap_content"
+            android:layout_width="140dp"
+            android:layout_height="17dp"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:layout_weight="6"
+            android:gravity="end"
             android:text="time"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/homedetail_textView"
             app:layout_constraintRight_toRightOf="@+id/home_imageView"
             app:layout_constraintTop_toBottomOf="@+id/home_imageView"
-            app:layout_constraintVertical_bias="0.555" />
+            app:layout_constraintVertical_bias="0.571" />
 
 
         <me.grantland.widget.AutofitTextView
@@ -97,17 +112,19 @@
 
         <TextView
             android:id="@+id/homedate_textView"
-            android:layout_width="80dp"
+            android:layout_width="150dp"
             android:layout_height="17dp"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             android:layout_weight="4"
             android:text="date"
+            android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/homedetail_textView"
             app:layout_constraintLeft_toLeftOf="@+id/home_imageView"
-            app:layout_constraintTop_toBottomOf="@+id/home_imageView" />
+            app:layout_constraintTop_toBottomOf="@+id/home_imageView"
+            app:layout_constraintVertical_bias="0.485" />
     </android.support.constraint.ConstraintLayout>
 
 

@@ -1,13 +1,20 @@
 package com.example.anubhav.modern.Adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.anubhav.modern.Models.CatalogItem;
 import com.example.anubhav.modern.R;
 
@@ -18,16 +25,18 @@ import java.util.List;
  */
 
 public class CatalogRecyclerAdapter extends RecyclerView.Adapter<CatalogRecyclerAdapter.CatalogViewHolder> {
+    int width;
     private Context mContext;
-    private ImageView imageView;
     private List<CatalogItem> arrayList;
     private CatalogRecyclerAdapter.CatalogClickListener mClickListener;
-//    PostItem postItem;
 
     public CatalogRecyclerAdapter(Context mContext, List<CatalogItem> arrayList, CatalogRecyclerAdapter.CatalogClickListener mClickListener) {
         this.mContext = mContext;
         this.arrayList = arrayList;
         this.mClickListener = mClickListener;
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        width = displayMetrics.widthPixels;
+
     }
 
 
@@ -39,10 +48,33 @@ public class CatalogRecyclerAdapter extends RecyclerView.Adapter<CatalogRecycler
 
 
     @Override
-    public void onBindViewHolder(CatalogViewHolder holder, int position) {
+    public void onBindViewHolder(final CatalogViewHolder holder, int position) {
         CatalogItem catalogItem = arrayList.get(position);
         holder.catalogDetailTextView.setText(catalogItem.getDetails());
         holder.catalogUserTextView.setText(catalogItem.getTitle());
+        Glide.with(mContext.getApplicationContext())
+                .load(catalogItem.getCatalogimageURL())
+                .asBitmap()
+                .centerCrop()
+//                .fitCenter()
+//                .override(300,holder.imageView.getHeight())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+
+                .listener(new RequestListener<String, Bitmap>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Bitmap resource, String model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        holder.mProgressBar.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
+                .into(holder.imageView);
+
+
     }
 
 
@@ -61,6 +93,7 @@ public class CatalogRecyclerAdapter extends RecyclerView.Adapter<CatalogRecycler
         TextView catalogDetailTextView;
         TextView catalogUserTextView;
         CatalogRecyclerAdapter.CatalogClickListener onClickListener;
+        ProgressBar mProgressBar;
 
 
         public CatalogViewHolder(View itemView, CatalogRecyclerAdapter.CatalogClickListener catalogClickListener) {
@@ -69,6 +102,7 @@ public class CatalogRecyclerAdapter extends RecyclerView.Adapter<CatalogRecycler
             imageView = itemView.findViewById(R.id.catalog_imageView);
             catalogDetailTextView = itemView.findViewById(R.id.catalog_detailtextView);
             catalogUserTextView = itemView.findViewById(R.id.catalog_titletextView);
+            mProgressBar = itemView.findViewById(R.id.catalog_imageprogress);
             onClickListener = catalogClickListener;
         }
 

@@ -28,6 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  * Created by Anubhav on 25-08-2017.
@@ -64,10 +65,13 @@ public class HomeFragment extends Fragment {
                     Log.e("PERSISTENCE ERROR", e.getMessage());
                     return;
                 }
+                homePostsArrayList.clear();
                 for (DocumentChange document : documentSnapshots.getDocumentChanges()) {
                     homePostsArrayList.add(document.getDocument().toObject(PostItem.class));
-                    homeRecyclerAdapter.notifyDataSetChanged();
                 }
+
+                Collections.reverse(homePostsArrayList);
+                homeRecyclerAdapter.notifyDataSetChanged();
             }
         });
         getHomePosts();
@@ -81,7 +85,7 @@ public class HomeFragment extends Fragment {
                 Thread thread = new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        fragmentManager.beginTransaction().replace(R.id.content, new UploaderFragment()).commit();
+                        fragmentManager.beginTransaction().replace(R.id.content, new HomeUploaderFragment()).commit();
                     }
                 });
                 thread.start();
@@ -117,6 +121,7 @@ public class HomeFragment extends Fragment {
                                 Log.i("ARRAYVALUE", document.toObject(PostItem.class).getDetails());
                             }
                         }
+                        Collections.reverse(homePostsArrayList);
                         homeRecyclerAdapter.notifyDataSetChanged();
                     }
                 });

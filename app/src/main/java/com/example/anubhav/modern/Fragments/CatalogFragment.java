@@ -3,10 +3,11 @@ package com.example.anubhav.modern.Fragments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +24,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -38,67 +40,52 @@ public class CatalogFragment extends Fragment {
     List<CatalogItem> catalogPostItemarrayList;
     CatalogRecyclerAdapter catalogRecyclerAdapter;
     FirebaseFirestore db;
+    FloatingActionButton floatingActionButton;
 
-    //    DatabaseReference myUserRef;
-//    FirebaseDatabase firebaseDatabase;
-//    DatabaseReference myCatalogRef;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.catalog_recyclerview, container, false);
         catalogRecyclerView = v.findViewById(R.id.catalog_recyclerViewList);
+        floatingActionButton = v.findViewById(R.id.catalog_fab);
         catalogPostItemarrayList = new ArrayList<>();
         db = FirebaseFirestore.getInstance();
+        final FragmentManager fragmentManager = getFragmentManager();
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Thread thread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        fragmentManager.beginTransaction().replace(R.id.content, new CatalogUploaderFragment()).commit();
+                    }
+                });
+                thread.start();
+            }
+
+        });
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(true)
                 .build();
         db.setFirestoreSettings(settings);
-        db.collection("catalogposts").addSnapshotListener(new EventListener<QuerySnapshot>() {
+        db.collection("catalogposts")
+                .orderBy("epoch", Query.Direction.DESCENDING)
+                .limit(40)
+                .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
                 if (e != null) {
-                    Log.e("PERSISTENCE ERROR", e.getMessage());
                     return;
                 }
                 for (DocumentChange document : documentSnapshots.getDocumentChanges()) {
                     catalogPostItemarrayList.add(document.getDocument().toObject(CatalogItem.class));
-                    Log.i("CATALOGARRAYVALUECACHE", document.getDocument().toObject(CatalogItem.class).getDetails());
-                    catalogRecyclerAdapter.notifyDataSetChanged();
                 }
+                catalogRecyclerAdapter.notifyDataSetChanged();
+
             }
         });
         getCatalogPosts();
-//        firebaseDatabase = FirebaseDatabase.getInstance();
-//        myUserRef = firebaseDatabase.getReference().child("Users");
-//        /*myCatalogRef* =*/
-//        firebaseDatabase.getReference().child("Catalog").addValueEventListener(new ValueEventListener() {
-//
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                catalogPostItemarrayList.clear(); //clear existing data
-//                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-//
-//                for (DataSnapshot uniqueCatalogPost : children) { //for populating the arraylist
-//                    CatalogItem catalogItem = uniqueCatalogPost.getValue(CatalogItem.class);
-//                    catalogPostItemarrayList.add(catalogItem);
-//                    catalogRecyclerAdapter.notifyDataSetChanged();
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//                Snackbar.make(catalogRecyclerView, "Please check your internet connection", Snackbar.LENGTH_LONG);
-//            }
-//        });
-
-//        retrieveCatalogPostFromFirebase();
-
-//        Log.d("POSTITEM - ",catalogPostItemarrayList.get(0).getDetails());
-//        for (int i = 0; i < 8; i++) {
-//            catalogPostItemarrayList.add(new CatalogItem("Surraj kathuria summer collection is here" + 1, "Summer Collection" + i));
-//        }
 
 
         catalogRecyclerAdapter = new CatalogRecyclerAdapter(getContext(), catalogPostItemarrayList, new CatalogRecyclerAdapter.CatalogClickListener() {
@@ -115,6 +102,8 @@ public class CatalogFragment extends Fragment {
 
     public void getCatalogPosts() {
         db.collection("catalogposts")
+                .limit(40)
+                .orderBy("epoch", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -124,7 +113,6 @@ public class CatalogFragment extends Fragment {
 
                             for (DocumentSnapshot document : task.getResult()) {
                                 catalogPostItemarrayList.add(document.toObject(CatalogItem.class));
-                                Log.i("CATALOGARRAYVALUE", document.toObject(CatalogItem.class).getDetails());
                             }
                         }
                         catalogRecyclerAdapter.notifyDataSetChanged();
@@ -132,26 +120,4 @@ public class CatalogFragment extends Fragment {
                 });
     }
 
-//    public void retrieveCatalogPostFromFirebase() {
-//        myCatalogRef.addValueEventListener(new ValueEventListener() {
-//
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                catalogPostItemarrayList.clear(); //clear existing data
-//
-//                for (DataSnapshot uniqueCatalogPost : dataSnapshot.getChildren()) { //for populating the arraylist
-//                    CatalogItem catalogItem = uniqueCatalogPost.getValue(CatalogItem.class);
-//                    catalogPostItemarrayList.add(catalogItem);
-//                    catalogRecyclerAdapter.notifyDataSetChanged();
-//                }
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//                Snackbar.make(catalogRecyclerView, "Please check your internet connection", Snackbar.LENGTH_LONG);
-//            }
-//        });
-//    }
 }

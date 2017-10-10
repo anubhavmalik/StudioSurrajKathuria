@@ -64,7 +64,7 @@ public class GetDetailsActivity extends AppCompatActivity {
         editPhotoImageView = findViewById(R.id.edit_activity_profilephoto);
         circleImageView = findViewById(R.id.profile_activity_image);
         mProgressBar = findViewById(R.id.newtonian_loading);
-        mProgressBar.setLoadingColor(R.color.colorPrimaryDark);
+        mProgressBar.setLoadingColor(getResources().getColor(R.color.colorPrimaryDark));
         showProgress(false);
         circleImageView.setOnClickListener(new View.OnClickListener() {
             @Override

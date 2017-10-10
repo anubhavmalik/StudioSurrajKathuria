@@ -14,19 +14,23 @@ public class PostItem implements Serializable {
     String time;
     String details;
     String by_user;
-    String user_ImageURL;
-    String post_ImageURL;
+    String userImageURL;
+    String postImageURL;
+    String epoch;
 
     public PostItem() {
     }
 
-    public PostItem(String date, String time, String details, String by_user, String user_ImageURL, String post_ImageURL) {
+
+    public PostItem(String date, String time, String details, String by_user, String userImageURL, String postImageURL, String epoch) {
         this.date = date;
         this.time = time;
         this.details = details;
         this.by_user = by_user;
-        this.user_ImageURL = user_ImageURL;
-        this.post_ImageURL = post_ImageURL;
+        this.userImageURL = userImageURL;
+        this.postImageURL = postImageURL;
+        this.epoch = epoch;
+
     }
 
     public String getDate() {
@@ -46,10 +50,14 @@ public class PostItem implements Serializable {
     }
 
     public String getUserImageURL() {
-        return user_ImageURL;
+        return userImageURL;
     }
 
     public String getPostImageURL() {
-        return post_ImageURL;
+        return postImageURL;
+    }
+
+    public String getEpoch() {
+        return epoch;
     }
 }

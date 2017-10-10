@@ -5,7 +5,7 @@
     android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/uploader_editText"
+        android:id="@+id/homeuploader_editText"
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_marginEnd="8dp"
@@ -22,32 +22,33 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/uploader_imageView"
+        android:id="@+id/homeuploader_imageView"
         android:layout_width="50dp"
         android:layout_height="44dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:src="@drawable/image_icon"
-        app:layout_constraintLeft_toLeftOf="@+id/uploader_editText"
-        app:layout_constraintTop_toBottomOf="@+id/uploader_editText" />
+        app:layout_constraintLeft_toLeftOf="@+id/homeuploader_editText"
+        app:layout_constraintTop_toBottomOf="@+id/homeuploader_editText" />
 
     <com.victor.loading.newton.NewtonCradleLoading
-        android:id="@+id/newton_cradle"
+        android:id="@+id/homenewton_cradle"
         android:layout_width="0dp"
         android:layout_height="143dp"
         android:layout_marginBottom="8dp"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
         android:layout_marginTop="0dp"
+        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/uploader_imageView"
-        app:layout_constraintRight_toLeftOf="@+id/uploader_fab"
-        app:layout_constraintTop_toBottomOf="@+id/uploader_editText">
+        app:layout_constraintLeft_toRightOf="@+id/homeuploader_imageView"
+        app:layout_constraintRight_toLeftOf="@+id/homeuploader_fab"
+        app:layout_constraintTop_toBottomOf="@+id/homeuploader_editText">
 
     </com.victor.loading.newton.NewtonCradleLoading>
 
     <TextView
-        android:id="@+id/uploader_nameTextView"
+        android:id="@+id/homeuploader_nameTextView"
         android:layout_width="208dp"
         android:layout_height="24dp"
         android:layout_marginEnd="8dp"
@@ -56,12 +57,13 @@
         android:layout_marginStart="8dp"
         android:gravity="center"
         android:text="Name"
-        app:layout_constraintLeft_toLeftOf="@+id/uploader_circleImageView"
-        app:layout_constraintRight_toRightOf="@+id/uploader_circleImageView"
-        app:layout_constraintTop_toBottomOf="@+id/uploader_circleImageView" />
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@+id/homeuploader_circleImageView"
+        app:layout_constraintRight_toRightOf="@+id/homeuploader_circleImageView"
+        app:layout_constraintTop_toBottomOf="@+id/homeuploader_circleImageView" />
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/uploader_circleImageView"
+        android:id="@+id/homeuploader_circleImageView"
         android:layout_width="75dp"
         android:layout_height="63dp"
         android:layout_marginBottom="8dp"
@@ -71,19 +73,19 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:src="@drawable/black"
-        app:layout_constraintBottom_toTopOf="@+id/uploader_editText"
+        app:layout_constraintBottom_toTopOf="@+id/homeuploader_editText"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.506" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/uploader_fab"
+        android:id="@+id/homeuploader_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:src="@drawable/tick_round"
-        app:layout_constraintRight_toRightOf="@+id/uploader_editText"
-        app:layout_constraintTop_toBottomOf="@+id/uploader_editText" />
+        app:layout_constraintRight_toRightOf="@+id/homeuploader_editText"
+        app:layout_constraintTop_toBottomOf="@+id/homeuploader_editText" />
 </android.support.constraint.ConstraintLayout>

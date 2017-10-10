@@ -69,6 +69,7 @@ public class Login extends AppCompatActivity {
                     } else {
                         mProgressBar.setVisibility(View.VISIBLE);
                         mLoginButton.setText("Sending OTP ...");
+                        touchDisabled();
                         verifyPhone();
                     }
                 }
@@ -95,7 +96,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
                 mLoginSharedPreferences.edit().putString(ApplicationConstants.phoneNumber, mPhoneEditText.getText().toString()).apply();
-
+                touchEnabled();
                 startActivity(new Intent(Login.this, GetDetailsActivity.class));
             }
 
@@ -112,18 +113,21 @@ public class Login extends AppCompatActivity {
                 try {
                     if (e instanceof FirebaseAuthInvalidCredentialsException) {
                         mLoginButton.setText(R.string.login_text);
-                        Snackbar.make(mLoginButton, "Invalid User Details", Snackbar.LENGTH_SHORT).show();
+                        mLoginButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+                        Snackbar.make(mLoginButton, "Incorrect Number or Remove area code", Snackbar.LENGTH_SHORT).show();
                     } else if (e instanceof FirebaseTooManyRequestsException) {
                         mLoginButton.setText(R.string.login_text);
+                        mLoginButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                         Snackbar.make(mLoginButton, "Can't authenticate", Snackbar.LENGTH_LONG);
                     }
                 } catch (Exception ex) {
                     Toast.makeText(Login.this, "Try Again", Toast.LENGTH_SHORT).show();
                 }
+                touchEnabled();
                 mProgressBar.setVisibility(View.INVISIBLE);
             }
         };
-        PhoneAuthProvider.getInstance().verifyPhoneNumber(mPhoneEditText.getText().toString(), 2, TimeUnit.MINUTES, this, mCallbacks);
+        PhoneAuthProvider.getInstance().verifyPhoneNumber("+91" + mPhoneEditText.getText().toString(), 2, TimeUnit.MINUTES, this, mCallbacks);
     }
 
     @Override
@@ -161,6 +165,19 @@ public class Login extends AppCompatActivity {
             }
         }, 1200);
 
+    }
+
+    public void touchDisabled() {
+//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+//                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        mPhoneEditText.setEnabled(false);
+        mLoginButton.setEnabled(false);
+    }
+
+    public void touchEnabled() {
+//        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+        mPhoneEditText.setEnabled(true);
+        mLoginButton.setEnabled(true);
     }
 
 

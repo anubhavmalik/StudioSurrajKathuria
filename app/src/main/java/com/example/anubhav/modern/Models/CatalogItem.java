@@ -10,17 +10,19 @@ import java.io.Serializable;
 @IgnoreExtraProperties
 
 public class CatalogItem implements Serializable {
-    String catalog_imageURL;
+    String catalogimageURL;
     String details;
     String title;
+    String epoch;
 
     public CatalogItem() {
     }
 
-    public CatalogItem(String catalog_imageURL, String details, String title) {
-        this.catalog_imageURL = catalog_imageURL;
+    public CatalogItem(String catalog_imageURL, String details, String title, String epoch) {
+        this.catalogimageURL = catalog_imageURL;
         this.details = details;
         this.title = title;
+        this.epoch = epoch;
 
 
     }
@@ -29,19 +31,17 @@ public class CatalogItem implements Serializable {
         return details;
     }
 
-    public void setDetails(String details) {
-        this.details = details;
-    }
 
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+
+    public String getCatalogimageURL() {
+        return catalogimageURL;
     }
 
-    public String getCatalog_imageURL() {
-        return catalog_imageURL;
+    public String getEpoch() {
+        return epoch;
     }
 }

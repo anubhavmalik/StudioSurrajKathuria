@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.anubhav.modern.Constants.ApplicationConstants;
 import com.example.anubhav.modern.Models.PostItem;
+import com.example.anubhav.modern.Models.TimeFetcher;
 import com.example.anubhav.modern.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,9 +31,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.victor.loading.newton.NewtonCradleLoading;
 
-import java.text.DateFormat;
-import java.util.Date;
-
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_OK;
@@ -42,7 +40,7 @@ import static android.content.Context.MODE_PRIVATE;
  * Created by Anubhav on 30-09-2017.
  */
 
-public class UploaderFragment extends Fragment {
+public class HomeUploaderFragment extends Fragment {
     final int RC_PHOTO_PICKER = 26;
     EditText detailsEditText;
     FloatingActionButton uploaderFab;
@@ -74,21 +72,21 @@ public class UploaderFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_uploader, null);
-        detailsEditText = v.findViewById(R.id.uploader_editText);
-        circleImageView = v.findViewById(R.id.uploader_circleImageView);
-        uploaderFab = v.findViewById(R.id.uploader_fab);
-        nameTextView = v.findViewById(R.id.uploader_nameTextView);
-        mPhotoPickerButton = v.findViewById(R.id.uploader_imageView);
+        View v = inflater.inflate(R.layout.home_uploader, null);
+        detailsEditText = v.findViewById(R.id.homeuploader_editText);
+        circleImageView = v.findViewById(R.id.homeuploader_circleImageView);
+        uploaderFab = v.findViewById(R.id.homeuploader_fab);
+        nameTextView = v.findViewById(R.id.homeuploader_nameTextView);
+        mPhotoPickerButton = v.findViewById(R.id.homeuploader_imageView);
         mPhoneNumberPreference = this.getActivity().getSharedPreferences(ApplicationConstants.loginStatePreferencesName, MODE_PRIVATE);
 
-        newtonCradleLoading = v.findViewById(R.id.newton_cradle);
-        newtonCradleLoading.setLoadingColor(R.color.colorPrimaryDark);
+        newtonCradleLoading = v.findViewById(R.id.homenewton_cradle);
+        newtonCradleLoading.setLoadingColor(getResources().getColor(R.color.colorPrimaryDark));
         showProgress(false);
 
         nameTextView.setText(mPhoneNumberPreference.getString(ApplicationConstants.userName, null));
 
-        Glide.with(UploaderFragment.this)
+        Glide.with(HomeUploaderFragment.this)
                 .load(mPhoneNumberPreference.getString(ApplicationConstants.userPhotoUrl, null))
                 .into(circleImageView);
 
@@ -102,9 +100,11 @@ public class UploaderFragment extends Fragment {
                 } else if (selectedImageUri == null) {
                     Toast.makeText(getContext(), "No Image Selected", Toast.LENGTH_SHORT).show();
                 } else {
+                    enableViews(false);
                     Snackbar.make(mPhotoPickerButton, "Posting...", Snackbar.LENGTH_INDEFINITE).show();
                     showProgress(true);
                     newtonCradleLoading.start();
+
                     StorageReference photoRef = homeStorageReference.child(selectedImageUri.getLastPathSegment());
 
                     photoRef.putFile(selectedImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -113,13 +113,14 @@ public class UploaderFragment extends Fragment {
                             Uri url = taskSnapshot.getDownloadUrl();
                             db = FirebaseFirestore.getInstance();
 
-                            String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
-                            PostItem postItem = new PostItem(currentDateTimeString.toString().substring(0, 11),
-                                    currentDateTimeString.toString().substring(12, 16) + " " + currentDateTimeString.toString().substring(20, 22),
+                            TimeFetcher timeFetcher = new TimeFetcher();
+                            PostItem postItem = new PostItem(timeFetcher.getPhoneDate(),
+                                    timeFetcher.getPhoneTime(),
                                     detailsEditText.getText().toString(),
                                     mPhoneNumberPreference.getString(ApplicationConstants.userName, null),
                                     mPhoneNumberPreference.getString(ApplicationConstants.userPhotoUrl, null),
-                                    url.toString());
+                                    url.toString(),
+                                    System.currentTimeMillis() + "");
                             db.collection("homeposts").add(postItem).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                 @Override
                                 public void onSuccess(DocumentReference documentReference) {
@@ -131,6 +132,7 @@ public class UploaderFragment extends Fragment {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
                                             showProgress(false);
+                                            enableViews(true);
                                             Snackbar.make(mPhotoPickerButton, "Oops! Something went wrong.", Snackbar.LENGTH_SHORT).show();
                                         }
                                     });
@@ -153,6 +155,13 @@ public class UploaderFragment extends Fragment {
 
 
         return v;
+    }
+
+    private void enableViews(boolean status) {
+        mPhotoPickerButton.setEnabled(status);
+        detailsEditText.setEnabled(status);
+        circleImageView.setEnabled(status);
+
     }
 
     private void showProgress(boolean status) {

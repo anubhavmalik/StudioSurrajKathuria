@@ -1,16 +1,20 @@
 package com.example.anubhav.modern.Adapters;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.anubhav.modern.Models.PostItem;
 import com.example.anubhav.modern.R;
 
@@ -45,7 +49,7 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
     }
 
     @Override
-    public void onBindViewHolder(HomeViewHolder holder, int position) {
+    public void onBindViewHolder(final HomeViewHolder holder, int position) {
         PostItem postItem = arrayList.get(position);
         holder.homeDetailTextView.setText(postItem.getDetails());
         holder.homeTimeTextView.setText(postItem.getTime());
@@ -54,6 +58,18 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
         Glide.with(mContext.getApplicationContext())
                 .load(postItem.getPostImageURL())
                 .asBitmap()
+                .listener(new RequestListener<String, Bitmap>() {
+                    @Override
+                    public boolean onException(Exception e, String model, Target<Bitmap> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Bitmap resource, String model, Target<Bitmap> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                        holder.mProgressbar.setVisibility(View.GONE);
+                        return false;
+                    }
+                })
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.postImageView);
@@ -84,6 +100,7 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
         TextView homeDetailTextView;
         CircleImageView homeCircularImageView;
         TextView homeUserTextView;
+        ProgressBar mProgressbar;
         HomeClickListener onClickListener;
 
 
@@ -96,6 +113,7 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
             homeTimeTextView = itemView.findViewById(R.id.hometime_textView);
             homeCircularImageView = itemView.findViewById(R.id.circular_imageView);
             homeUserTextView = itemView.findViewById(R.id.user_textView);
+            mProgressbar = itemView.findViewById(R.id.home_imageprogress);
             onClickListener = homeClickListener;
         }
 
