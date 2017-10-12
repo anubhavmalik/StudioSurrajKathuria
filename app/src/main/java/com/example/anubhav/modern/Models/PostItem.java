@@ -14,6 +14,7 @@ public class PostItem implements Serializable {
     String time;
     String details;
     String by_user;
+    String by_userNumber;
     String userImageURL;
     String postImageURL;
     String epoch;
@@ -22,7 +23,7 @@ public class PostItem implements Serializable {
     }
 
 
-    public PostItem(String date, String time, String details, String by_user, String userImageURL, String postImageURL, String epoch) {
+    public PostItem(String date, String time, String details, String by_user, String userImageURL, String postImageURL, String epoch, String by_userNumber) {
         this.date = date;
         this.time = time;
         this.details = details;
@@ -30,6 +31,8 @@ public class PostItem implements Serializable {
         this.userImageURL = userImageURL;
         this.postImageURL = postImageURL;
         this.epoch = epoch;
+        this.by_userNumber = by_userNumber;
+
 
     }
 
@@ -57,6 +60,9 @@ public class PostItem implements Serializable {
         return postImageURL;
     }
 
+    public String getBy_userNumber() {
+        return by_userNumber;
+    }
     public String getEpoch() {
         return epoch;
     }

@@ -6,6 +6,7 @@
 
 
     <me.grantland.widget.AutofitTextView
+        android:id="@+id/guest_note_textView"
         android:layout_width="0dp"
         android:layout_height="40dp"
         android:layout_marginBottom="8dp"
@@ -23,6 +24,7 @@
         android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_below="@+id/guest_note_textView"
         android:scaleType="centerCrop"
         android:src="@drawable/studioentrance"
         app:layout_constraintBottom_toBottomOf="parent"

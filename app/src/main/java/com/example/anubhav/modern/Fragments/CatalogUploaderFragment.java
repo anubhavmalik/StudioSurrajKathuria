@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -126,10 +125,7 @@ public class CatalogUploaderFragment extends Fragment {
                                             .setCallback(new Snackbar.Callback() {
                                                              @Override
                                                              public void onDismissed(Snackbar transientBottomBar, int event) {
-                                                                 FragmentManager fragmentManager = getFragmentManager();
-                                                                 fragmentManager.beginTransaction()
-                                                                         .replace(R.id.main_activity_fragment_container, new CatalogFragment())
-                                                                         .commit();
+                                                                 //TODO: POP THIS STACK
                                                              }
                                                          }
                                             )

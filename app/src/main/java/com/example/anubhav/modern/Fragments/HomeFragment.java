@@ -11,7 +11,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +30,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -71,18 +71,18 @@ public class HomeFragment extends Fragment {
                     .setPersistenceEnabled(true)
                     .build();
             db.setFirestoreSettings(settings);
-            db.collection("homeposts").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            db.collection("homeposts")
+                    .orderBy("epoch", Query.Direction.DESCENDING)
+                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
                     if (e != null) {
-                        Log.e("PERSISTENCE ERROR", e.getMessage());
                         return;
                     }
                     homePostsArrayList.clear();
                     for (DocumentChange document : documentSnapshots.getDocumentChanges()) {
                         homePostsArrayList.add(document.getDocument().toObject(PostItem.class));
                     }
-
                     Collections.reverse(homePostsArrayList);
                     homeRecyclerAdapter.notifyDataSetChanged();
                 }
@@ -120,9 +120,8 @@ public class HomeFragment extends Fragment {
         } else {
             //TODO: ADD A LAYOUT HERE TO INFLATE IF USER IS NOT SIGNED IN.
             View v = inflater.inflate(R.layout.guest_home, container, false);
-
             guestLoginButton = v.findViewById(R.id.home_login_button);
-
+            guestLoginButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
             guestLoginButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -137,6 +136,7 @@ public class HomeFragment extends Fragment {
 
     public void getHomePosts() {
         db.collection("homeposts")
+                .orderBy("epoch", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -146,10 +146,10 @@ public class HomeFragment extends Fragment {
 
                             for (DocumentSnapshot document : task.getResult()) {
                                 homePostsArrayList.add(document.toObject(PostItem.class));
-                                Log.i("ARRAYVALUE", document.toObject(PostItem.class).getDetails());
                             }
                         }
                         Collections.reverse(homePostsArrayList);
+
                         homeRecyclerAdapter.notifyDataSetChanged();
                     }
                 });

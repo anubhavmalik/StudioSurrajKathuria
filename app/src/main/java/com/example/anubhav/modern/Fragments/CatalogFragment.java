@@ -28,6 +28,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -71,7 +72,7 @@ public class CatalogFragment extends Fragment {
         db.setFirestoreSettings(settings);
         db.collection("catalogposts")
                 .orderBy("epoch", Query.Direction.DESCENDING)
-                .limit(40)
+                .limit(80)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
@@ -81,6 +82,7 @@ public class CatalogFragment extends Fragment {
                 for (DocumentChange document : documentSnapshots.getDocumentChanges()) {
                     catalogPostItemarrayList.add(document.getDocument().toObject(CatalogItem.class));
                 }
+                Collections.reverse(catalogPostItemarrayList);
                 catalogRecyclerAdapter.notifyDataSetChanged();
 
             }
@@ -102,7 +104,7 @@ public class CatalogFragment extends Fragment {
 
     public void getCatalogPosts() {
         db.collection("catalogposts")
-                .limit(40)
+                .limit(80)
                 .orderBy("epoch", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -115,6 +117,8 @@ public class CatalogFragment extends Fragment {
                                 catalogPostItemarrayList.add(document.toObject(CatalogItem.class));
                             }
                         }
+                        Collections.reverse(catalogPostItemarrayList);
+
                         catalogRecyclerAdapter.notifyDataSetChanged();
                     }
                 });

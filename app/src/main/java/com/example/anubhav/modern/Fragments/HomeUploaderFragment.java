@@ -120,7 +120,8 @@ public class HomeUploaderFragment extends Fragment {
                                     mPhoneNumberPreference.getString(ApplicationConstants.userName, null),
                                     mPhoneNumberPreference.getString(ApplicationConstants.userPhotoUrl, null),
                                     url.toString(),
-                                    System.currentTimeMillis() + "");
+                                    System.currentTimeMillis() + "",
+                                    mPhoneNumberPreference.getString(ApplicationConstants.phoneNumber, null));
                             db.collection("homeposts").add(postItem).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                 @Override
                                 public void onSuccess(DocumentReference documentReference) {
