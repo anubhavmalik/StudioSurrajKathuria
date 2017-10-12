@@ -2,6 +2,7 @@ package com.example.anubhav.modern.Adapters;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
@@ -16,7 +17,12 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.example.anubhav.modern.Models.PostItem;
+import com.example.anubhav.modern.Models.UserItem;
 import com.example.anubhav.modern.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.ArrayList;
 
@@ -28,6 +34,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapter.HomeViewHolder> {
     int width;
+    FirebaseFirestore db;
     private Context mContext;
     private ArrayList<PostItem> arrayList;
     private HomeClickListener mClickListener;
@@ -39,6 +46,7 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
         this.mClickListener=mClickListener;
         DisplayMetrics displayMetrics = new DisplayMetrics();
         width = displayMetrics.widthPixels;
+        db = FirebaseFirestore.getInstance();
     }
 
 
@@ -54,7 +62,7 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
         holder.homeDetailTextView.setText(postItem.getDetails());
         holder.homeTimeTextView.setText(postItem.getTime());
         holder.homeDateTextView.setText(postItem.getDate());
-        holder.homeUserTextView.setText(postItem.getBy_user());
+//        holder.homeUserTextView.setText(postItem.getBy_user());
         Glide.with(mContext.getApplicationContext())
                 .load(postItem.getPostImageURL())
                 .asBitmap()
@@ -74,12 +82,29 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.postImageView);
 
-        Glide.with(mContext.getApplicationContext())
-                .load(postItem.getUserImageURL())
-                .asBitmap()
-                .centerCrop()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(holder.homeCircularImageView);
+//        UserItem userItem =db.collection("users").document(postItem.getBy_userNumber()).get().getResult().toObject(UserItem.class);
+//        UserItem user;
+//
+        db.collection("users").document(postItem.getBy_userNumber()).get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            UserItem userItem = task.getResult().toObject(UserItem.class);
+                            Glide.with(mContext.getApplicationContext())
+                                    .load(userItem.getPhotourl())
+                                    .asBitmap()
+                                    .centerCrop()
+                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                    .into(holder.homeCircularImageView);
+
+                            holder.homeUserTextView.setText(userItem.getName());
+                        }
+                    }
+                });
+
+
+
     }
 
 

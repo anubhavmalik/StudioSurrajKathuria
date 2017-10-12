@@ -20,6 +20,7 @@ import android.widget.Toast;
 import com.example.anubhav.modern.Adapters.HomeRecyclerAdapter;
 import com.example.anubhav.modern.Constants.ApplicationConstants;
 import com.example.anubhav.modern.Models.PostItem;
+import com.example.anubhav.modern.Models.UserItem;
 import com.example.anubhav.modern.R;
 import com.example.anubhav.modern.Visible.Login;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -47,6 +48,8 @@ public class HomeFragment extends Fragment {
     SharedPreferences mUserSharedPreferences;
     FloatingActionButton floatingActionButton;
     Button guestLoginButton;
+    ArrayList<UserItem> userItems;
+    ArrayList<String> usersInOrderOfPosts;
     FirebaseFirestore db;
 
 
@@ -65,6 +68,8 @@ public class HomeFragment extends Fragment {
             View v = inflater.inflate(R.layout.home_recyclerview, container, false);
             homeRecyclerView = v.findViewById(R.id.homefragment_recyclerView);
             homePostsArrayList = new ArrayList<>();
+            userItems = new ArrayList<>();
+            usersInOrderOfPosts = new ArrayList<>();
             floatingActionButton = v.findViewById(R.id.fab);
             db = FirebaseFirestore.getInstance();
             FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
@@ -87,7 +92,21 @@ public class HomeFragment extends Fragment {
                     homeRecyclerAdapter.notifyDataSetChanged();
                 }
             });
+//            db.collection("users")
+//                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
+//                        @Override
+//                        public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+//                            if (e != null) {
+//                                return;
+//                            }
+//                            userItems.clear();
+//                            for (DocumentChange document : documentSnapshots.getDocumentChanges()) {
+//                                userItems.add(document.getDocument().toObject(UserItem.class));
+//                            }
+//                        }
+//                    });
             getHomePosts();
+//            getUsers();
 
             final FragmentManager fragmentManager = getFragmentManager();
 
@@ -154,6 +173,28 @@ public class HomeFragment extends Fragment {
                     }
                 });
     }
+
+//    public void getUsers(){
+//        db.collection("users")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if(task.isSuccessful()){
+//                            for( DocumentSnapshot documentSnapshot : task.getResult()){
+//                                userItems.add(documentSnapshot.toObject(UserItem.class));
+//                            }
+//                        }
+//                    }
+//                });
+//    }
+//    public void sortUsers(){
+//        int position;
+//        for(int i=0;i<homePostsArrayList.size();i++){
+//            usersInOrderOfPosts.add(homePostsArrayList.get(i).getBy_userNumber());
+//        }
+//        userItems.get(usersInOrderOfPosts.)
+//    }
 
 
 }

@@ -98,7 +98,7 @@ public class GetDetailsActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                             final Uri url = taskSnapshot.getDownloadUrl();
-                            final UserItem userItem = new UserItem(nameEditText.getText().toString(), url.toString());
+                            final UserItem userItem = new UserItem(nameEditText.getText().toString(), url.toString(), mPhoneSharedPreferences.getString(ApplicationConstants.phoneNumber, null));
                             Toast.makeText(GetDetailsActivity.this, "Registering you in our awesome client community", Toast.LENGTH_LONG).show();
                             db.collection("users").document(mPhoneSharedPreferences.getString(ApplicationConstants.phoneNumber, null)).set(userItem).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

@@ -132,8 +132,12 @@ public class ProfileFragment extends Fragment {
                 public void onClick(View view) {
                     if (mUserDetailsSharedPreferences.getString(ApplicationConstants.userName, null).equals(nameTextView.getText().toString()))
                         setNameChanged(false);
+                    else if (!mUserDetailsSharedPreferences.getString(ApplicationConstants.userName, null).equals(nameTextView.getText().toString())) {
+                        setNameChanged(true);
+                    }
 
                     else if (isImageChanged() && isNameChanged()) {
+                        Snackbar.make(saveButton, "Updating your details", Snackbar.LENGTH_SHORT).show();
                         userStorageRef = FirebaseStorage.getInstance().getReference().child(getString(R.string.userStorage));
                         userStorageRef.child(mUserDetailsSharedPreferences.getString(ApplicationConstants.userPhotoUrl, null))
                                 .delete();
@@ -142,7 +146,7 @@ public class ProfileFragment extends Fragment {
                                 .putFile(selectedImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                UserItem userItem = new UserItem(nameTextView.getText().toString(), task.getResult().getDownloadUrl().toString());
+                                UserItem userItem = new UserItem(nameTextView.getText().toString(), task.getResult().getDownloadUrl().toString(), mUserDetailsSharedPreferences.getString(ApplicationConstants.phoneNumber, null));
                                 final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
                                 firebaseFirestore.collection("users")
                                         .document(mUserDetailsSharedPreferences.getString(ApplicationConstants.phoneNumber, null))
