@@ -16,4 +16,9 @@
         android:icon="@drawable/human_icon"
         android:title="@string/title_notifications" />
 
+    <item
+        android:id="@+id/navigation_inquiry"
+        android:icon="@drawable/inquiry_icon"
+        android:title="@string/inquiry" />
+
 </menu>

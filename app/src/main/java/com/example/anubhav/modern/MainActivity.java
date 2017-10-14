@@ -11,9 +11,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
-import com.example.anubhav.modern.Constants.IntentConstants;
 import com.example.anubhav.modern.Fragments.CatalogFragment;
 import com.example.anubhav.modern.Fragments.HomeFragment;
+import com.example.anubhav.modern.Fragments.InquiryFragment;
 import com.example.anubhav.modern.Fragments.ProfileFragment;
 import com.example.anubhav.modern.Models.PostItem;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -26,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     HomeFragment homeFragment;
     CatalogFragment catalogFragment;
     ProfileFragment profileFragment;
+    InquiryFragment inquiryFragment;
     boolean startup;
     String phoneNumber;
     ArrayList<PostItem> homePostsArrayList;
@@ -57,6 +58,13 @@ public class MainActivity extends AppCompatActivity {
 
 
                     return true;
+
+                case R.id.navigation_inquiry:
+                    setTitle("Inquiry");
+                    setFragment(inquiryFragment);
+
+
+                    return true;
             }
             return false;
         }
@@ -70,14 +78,17 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         startup = true;
         homePostsArrayList = new ArrayList<>();
+        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         db = FirebaseFirestore.getInstance();
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(true)
                 .build();
         db.setFirestoreSettings(settings);
+//        navigation.setItemTextColor(getResources().getColor(R.color.hintColor));
 
 
-        phoneNumber = getIntent().getStringExtra(IntentConstants.phoneNumberText);
+//        phoneNumber = getIntent().getStringExtra(IntentConstants.phoneNumberText);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -85,12 +96,12 @@ public class MainActivity extends AppCompatActivity {
         homeFragment = new HomeFragment();
         catalogFragment = new CatalogFragment();
         profileFragment = new ProfileFragment();
+        inquiryFragment = new InquiryFragment();
+
+        //Default page on opening
+        navigation.setSelectedItemId(R.id.navigation_catalog);
 
 
-        setFragment(catalogFragment);
-
-        BottomNavigationView navigation = findViewById(R.id.navigation);
-        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
     @Override

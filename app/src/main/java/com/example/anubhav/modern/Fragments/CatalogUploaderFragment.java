@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.example.anubhav.modern.Constants.ApplicationConstants;
 import com.example.anubhav.modern.Models.CatalogItem;
-import com.example.anubhav.modern.Models.TimeFetcher;
 import com.example.anubhav.modern.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -115,21 +114,15 @@ public class CatalogUploaderFragment extends Fragment {
                             Uri url = taskSnapshot.getDownloadUrl();
                             db = FirebaseFirestore.getInstance();
 
-                            TimeFetcher timeFetcher = new TimeFetcher();
                             CatalogItem catalogItem = new CatalogItem(url.toString(), detailsEditText.getText().toString(), titleEditText.getText().toString(), System.currentTimeMillis() + "");
-                            db.collection("catalogposts").add(catalogItem).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            db.collection("catalogposts")
+                                    .add(catalogItem)
+                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                 @Override
                                 public void onSuccess(DocumentReference documentReference) {
                                     showProgress(false);
-                                    Snackbar.make(mPhotoPickerButton, "You Posted Successfully", Snackbar.LENGTH_SHORT)
-                                            .setCallback(new Snackbar.Callback() {
-                                                             @Override
-                                                             public void onDismissed(Snackbar transientBottomBar, int event) {
-                                                                 //TODO: POP THIS STACK
-                                                             }
-                                                         }
-                                            )
-                                            .show();
+                                    Snackbar.make(mPhotoPickerButton, "You Posted Successfully", Snackbar.LENGTH_SHORT).show();
+                                    getFragmentManager().popBackStack();
                                 }
                             })
                                     .addOnFailureListener(new OnFailureListener() {
@@ -149,10 +142,20 @@ public class CatalogUploaderFragment extends Fragment {
         mPhotoPickerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                intent.setType("image/jpeg");
-                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-                startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
+//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+//                intent.setType("image/jpeg");
+//                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
+//                startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
+                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                getIntent.setType("image/*");
+
+                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                pickIntent.setType("image/*");
+
+                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
+
+                startActivityForResult(chooserIntent, RC_PHOTO_PICKER);
 
             }
         });

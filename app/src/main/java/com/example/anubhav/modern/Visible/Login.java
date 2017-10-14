@@ -1,8 +1,11 @@
 package com.example.anubhav.modern.Visible;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
@@ -49,11 +52,6 @@ public class Login extends AppCompatActivity {
         mLoginSharedPreferences = this.getSharedPreferences(ApplicationConstants.loginStatePreferencesName, MODE_PRIVATE);
 
 
-//        if(mFirstLoginSharedPreference.getBoolean(ApplicationConstants.firstLogin,true)){
-//            fetchUserIfExists();
-//        }
-
-
         if (mLoginSharedPreferences.getBoolean(ApplicationConstants.loginState, false)) {
             goToMainAcivity();
             finish();
@@ -64,13 +62,19 @@ public class Login extends AppCompatActivity {
             mLoginButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+
+
                     if (mPhoneEditText.getText().toString().length() != 10) {
                         mPhoneEditText.setError("Invalid Number");
                     } else {
-                        mProgressBar.setVisibility(View.VISIBLE);
-                        mLoginButton.setText("Sending OTP ...");
-                        touchDisabled();
-                        verifyPhone();
+                        if (isNetworkAvailable()) {
+                            mProgressBar.setVisibility(View.VISIBLE);
+                            mLoginButton.setText("Sending OTP ...");
+                            touchDisabled();
+                            verifyPhone();
+                        } else {
+                            Snackbar.make(mLoginButton, "Check your internet connection", Snackbar.LENGTH_SHORT).show();
+                        }
                     }
                 }
             });
@@ -92,6 +96,7 @@ public class Login extends AppCompatActivity {
     }
 
     private void verifyPhone() {
+
         PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
             public void onVerificationCompleted(PhoneAuthCredential phoneAuthCredential) {
@@ -112,18 +117,22 @@ public class Login extends AppCompatActivity {
             public void onVerificationFailed(FirebaseException e) {
                 try {
                     if (e instanceof FirebaseAuthInvalidCredentialsException) {
-                        mLoginButton.setText(R.string.login_text);
+                        mLoginButton.setText(R.string.tryagain);
                         mLoginButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                         Snackbar.make(mLoginButton, "Incorrect Number or Remove area code", Snackbar.LENGTH_SHORT).show();
                     } else if (e instanceof FirebaseTooManyRequestsException) {
-                        mLoginButton.setText(R.string.login_text);
+                        mLoginButton.setText(R.string.tryagain);
                         mLoginButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
                         Snackbar.make(mLoginButton, "Can't authenticate", Snackbar.LENGTH_LONG);
                     }
                 } catch (Exception ex) {
                     Toast.makeText(Login.this, "Try Again", Toast.LENGTH_SHORT).show();
+
                 }
+                Toast.makeText(Login.this, "Check internet connection.", Toast.LENGTH_SHORT).show();
+
                 touchEnabled();
+                mLoginButton.setText(R.string.tryagain);
                 mProgressBar.setVisibility(View.INVISIBLE);
             }
         };
@@ -180,5 +189,11 @@ public class Login extends AppCompatActivity {
         mLoginButton.setEnabled(true);
     }
 
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+    }
 
 }

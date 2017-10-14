@@ -24,4 +24,6 @@
     <string name="homeImageStorage">homeimagesheresurrajkathuriaphotosfirebasestorage</string>
     <string name="userStorage">userimagesforsurrajkathuriaappherefirebasestorage</string>
     <string name="catalogstorage">Catalogersurrajkathuriaapplicationimagesherestoragefirebase</string>
+    <string name="inquiry">Inquiry</string>
+    <string name="tryagain">Try Again</string>
 </resources>

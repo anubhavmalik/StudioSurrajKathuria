@@ -16,15 +16,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
 import com.example.anubhav.modern.Constants.ApplicationConstants;
-import com.example.anubhav.modern.Models.PostItem;
 import com.example.anubhav.modern.Models.UserItem;
 import com.example.anubhav.modern.R;
 import com.example.anubhav.modern.Visible.Login;
@@ -51,11 +50,11 @@ public class ProfileFragment extends Fragment {
     EditText numberTextView;
     Uri selectedImageUri;
     CircleImageView circleImageView;
+    ProgressBar mProgressbar;
     ListView mListView;
     Button saveButton, guestLoginButton;
     boolean imageChanged = false, nameChanged = false;
     ArrayList<String> mArrayList;
-    ArrayList<PostItem> updationArrayList, updationCopyArrayList;
     ArrayAdapter<String> arrayAdapter;
     StorageReference userStorageRef;
     String currentImageURL;
@@ -110,6 +109,9 @@ public class ProfileFragment extends Fragment {
             saveButton = v.findViewById(R.id.profile_save);
             circleImageView = v.findViewById(R.id.profile_image);
             mListView = v.findViewById(R.id.profile_listView);
+            mProgressbar = v.findViewById(R.id.profile_fragment_progress);
+
+            final InquiryFragment inquiryFragment = new InquiryFragment();
 
             numberTextView.setEnabled(false);
             enableViews(false);
@@ -130,13 +132,49 @@ public class ProfileFragment extends Fragment {
             saveButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (mUserDetailsSharedPreferences.getString(ApplicationConstants.userName, null).equals(nameTextView.getText().toString()))
+                    saveButton.setEnabled(false);
+                    if (mUserDetailsSharedPreferences.getString(ApplicationConstants.userName, null).equals(nameTextView.getText().toString()) && !isImageChanged()) {
+                        Log.i("PROFILEUPDATION", "NO CHANGES");
+                        enableViews(false);
+                        return;
+                    } else if (mUserDetailsSharedPreferences.getString(ApplicationConstants.userName, null).equals(nameTextView.getText().toString())) {
                         setNameChanged(false);
-                    else if (!mUserDetailsSharedPreferences.getString(ApplicationConstants.userName, null).equals(nameTextView.getText().toString())) {
+                        enableViews(false);
+                    } else {
                         setNameChanged(true);
+                        enableViews(false);
                     }
 
-                    else if (isImageChanged() && isNameChanged()) {
+                    final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+
+                    if (isNameChanged() && !isImageChanged()) {
+                        Snackbar.make(saveButton, "Updating your details", Snackbar.LENGTH_SHORT).show();
+                        firebaseFirestore.collection("users")
+                                .document(mUserDetailsSharedPreferences.getString(ApplicationConstants.phoneNumber, null))
+                                .update("name", nameTextView.getText().toString())
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            mProgressbar.setVisibility(View.GONE);
+                                            Snackbar.make(saveButton, "Updated Successfully", Snackbar.LENGTH_SHORT).setCallback(new Snackbar.Callback() {
+                                                @Override
+                                                public void onDismissed(Snackbar transientBottomBar, int event) {
+                                                    super.onDismissed(transientBottomBar, event);
+                                                    mUserDetailsSharedPreferences.edit().putString(ApplicationConstants.userName, nameTextView.getText().toString()).apply();
+
+                                                    getActivity().onBackPressed();
+                                                }
+                                            }).show();
+                                            enableViews(false);
+                                        }
+                                    }
+                                });
+                    }
+
+
+                    if (isImageChanged() && isNameChanged()) {
+                        mProgressbar.setVisibility(View.VISIBLE);
                         Snackbar.make(saveButton, "Updating your details", Snackbar.LENGTH_SHORT).show();
                         userStorageRef = FirebaseStorage.getInstance().getReference().child(getString(R.string.userStorage));
                         userStorageRef.child(mUserDetailsSharedPreferences.getString(ApplicationConstants.userPhotoUrl, null))
@@ -146,85 +184,96 @@ public class ProfileFragment extends Fragment {
                                 .putFile(selectedImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                             @Override
                             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                                UserItem userItem = new UserItem(nameTextView.getText().toString(), task.getResult().getDownloadUrl().toString(), mUserDetailsSharedPreferences.getString(ApplicationConstants.phoneNumber, null));
-                                final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
+                                final UserItem userItem = new UserItem(nameTextView.getText().toString(), task.getResult().getDownloadUrl().toString(), mUserDetailsSharedPreferences.getString(ApplicationConstants.phoneNumber, null));
+
                                 firebaseFirestore.collection("users")
                                         .document(mUserDetailsSharedPreferences.getString(ApplicationConstants.phoneNumber, null))
                                         .set(userItem)
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                                             @Override
                                             public void onComplete(@NonNull Task<Void> task) {
-                                                Log.i("USERURLEDIT", "photourl for user has been edited successfully");
+                                                mUserDetailsSharedPreferences.edit().putString(ApplicationConstants.userPhotoUrl, userItem.getPhotourl()).apply();
+                                                mUserDetailsSharedPreferences.edit().putString(ApplicationConstants.userName, userItem.getName()).apply();
+                                                mProgressbar.setVisibility(View.GONE);
+                                                Snackbar.make(nameTextView, "Changes saved", Snackbar.LENGTH_SHORT).setCallback(new Snackbar.Callback() {
+                                                    @Override
+                                                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                                                        super.onDismissed(transientBottomBar, event);
+                                                        getFragmentManager().popBackStack();
+
+                                                    }
+                                                }).show();
+
                                             }
                                         });
-//                                firebaseFirestore.collection("homeposts")
-//                                        .orderBy("epoch", Query.Direction.DESCENDING)
-//                                        .get()
-//                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                                            @Override
-//                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                                                if (task.isSuccessful()) {
-//                                                    updationArrayList = new ArrayList<>();
-//
-//                                                    for (DocumentSnapshot document : task.getResult()) {
-//                                                        updationArrayList.add(document.toObject(PostItem.class));
-//                                                    }
-//                                                }
-//                                                for (int i = 0; i < updationArrayList.size(); i++) {
-//                                                    if (updationArrayList.get(i).getUserImageURL().equals(mUserDetailsSharedPreferences.getString(currentImageURL, null))) {
-//                                                        updationCopyArrayList.add(updationArrayList.get(i));
-//                                                    }
-//                                                }
-//                                            }
-//                                        });
-//                                //TODO: UPDATE VALUE OF USER PHOTO URL FOR EACH POST
-
-
-                                Snackbar.make(nameTextView, "Changes saved", Snackbar.LENGTH_SHORT).show();
-                                mUserDetailsSharedPreferences.edit()
-                                        .putString(ApplicationConstants.userPhotoUrl, task.getResult().getDownloadUrl().toString());
+                                enableViews(false);
                             }
+
                         });
 
                     }
+                    if (isImageChanged() && !isNameChanged()) {
+                        mProgressbar.setVisibility(View.VISIBLE);
+                        Snackbar.make(saveButton, "Updating your details", Snackbar.LENGTH_SHORT).show();
+                        userStorageRef = FirebaseStorage.getInstance().getReference().child(getString(R.string.userStorage));
+                        userStorageRef.child(mUserDetailsSharedPreferences.getString(ApplicationConstants.userPhotoUrl, null))
+                                .delete();
+                        userStorageRef.child(mUserDetailsSharedPreferences
+                                .getString(ApplicationConstants.phoneNumber, null) + selectedImageUri.getLastPathSegment())
+                                .putFile(selectedImageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                            @Override
+                            public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                                final UserItem userItem = new UserItem(nameTextView.getText().toString(), task.getResult().getDownloadUrl().toString(), mUserDetailsSharedPreferences.getString(ApplicationConstants.phoneNumber, null));
 
+                                firebaseFirestore.collection("users")
+                                        .document(mUserDetailsSharedPreferences.getString(ApplicationConstants.phoneNumber, null))
+                                        .set(userItem)
+                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                            @Override
+                                            public void onComplete(@NonNull Task<Void> task) {
+                                                mUserDetailsSharedPreferences.edit().putString(ApplicationConstants.userPhotoUrl, userItem.getPhotourl()).apply();
+                                                mProgressbar.setVisibility(View.GONE);
+                                                Snackbar.make(nameTextView, "Changes saved", Snackbar.LENGTH_SHORT).setCallback(new Snackbar.Callback() {
+                                                    @Override
+                                                    public void onDismissed(Snackbar transientBottomBar, int event) {
+                                                        super.onDismissed(transientBottomBar, event);
+                                                        getFragmentManager().popBackStack();
+
+                                                    }
+                                                }).show();
+
+                                            }
+
+                                        });
+                                enableViews(false);
+                            }
+                        });
+                    }
                 }
             });
             circleImageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                    intent.setType("image/jpeg");
-                    intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-                    startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
+                    Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+                    getIntent.setType("image/*");
+
+                    Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    pickIntent.setType("image/*");
+
+                    Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+                    chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
+
+                    startActivityForResult(chooserIntent, RC_PHOTO_PICKER);
                     setImageChanged(true);
+
                 }
             });
 
-            mArrayList = new ArrayList<>();
-            mArrayList.add("Reach Us");
-            mArrayList.add("About Surraj Kathuria");
-            mArrayList.add("About Vimmi Kathuria");
-            arrayAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1, mArrayList);
-            mListView.setAdapter(arrayAdapter);
-            mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    if (i == 0) {
-                        //TODO : Layout for REACH US
-                    } else if (i == 1) {
-                        //TODO: Layout for about Surraj Kathuria
-                    } else if (i == 2) {
-                        //TODO: Layout for about Vimmi Kathuria
-                    }
-                }
-            });
+
             return v;
         } else {
             View v = inflater.inflate(R.layout.guest_home, container, false);
-//            enableViews(false);
             guestLoginButton = v.findViewById(R.id.home_login_button);
-//            saveButton=v.findViewById(R.id.profile_save);
 
             guestLoginButton.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
 
@@ -234,7 +283,9 @@ public class ProfileFragment extends Fragment {
                 public void onClick(View view) {
                     startActivity(new Intent(getContext(), Login.class));
                 }
+
             });
+
 
             return v;
         }

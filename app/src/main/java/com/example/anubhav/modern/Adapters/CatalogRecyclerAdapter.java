@@ -42,7 +42,7 @@ public class CatalogRecyclerAdapter extends RecyclerView.Adapter<CatalogRecycler
 
     @Override
     public CatalogRecyclerAdapter.CatalogViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        android.view.View itemView = LayoutInflater.from(mContext).inflate(R.layout.catalogcardlayout, parent, false);
+        android.view.View itemView = LayoutInflater.from(mContext).inflate(R.layout.catalog_card_layout, parent, false);
         return new CatalogRecyclerAdapter.CatalogViewHolder(itemView, mClickListener);
     }
 

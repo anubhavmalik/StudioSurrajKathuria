@@ -13,6 +13,8 @@ public class UserItem implements Serializable {
 
     String name, photourl, number;
 
+    public UserItem() {
+    }
 
     public UserItem(/*int user_id boolean isAdmin,*/ String name, String photourl, String number) {
         this.name = name;

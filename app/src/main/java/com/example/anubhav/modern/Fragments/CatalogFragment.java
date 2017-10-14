@@ -11,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.anubhav.modern.Adapters.CatalogRecyclerAdapter;
@@ -28,7 +29,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -41,6 +41,7 @@ public class CatalogFragment extends Fragment {
     List<CatalogItem> catalogPostItemarrayList;
     CatalogRecyclerAdapter catalogRecyclerAdapter;
     FirebaseFirestore db;
+    ProgressBar mProgressBar;
     FloatingActionButton floatingActionButton;
 
 
@@ -50,6 +51,7 @@ public class CatalogFragment extends Fragment {
         View v = inflater.inflate(R.layout.catalog_recyclerview, container, false);
         catalogRecyclerView = v.findViewById(R.id.catalog_recyclerViewList);
         floatingActionButton = v.findViewById(R.id.catalog_fab);
+        mProgressBar = v.findViewById(R.id.catalog_fragment_progress);
         catalogPostItemarrayList = new ArrayList<>();
         db = FirebaseFirestore.getInstance();
         final FragmentManager fragmentManager = getFragmentManager();
@@ -82,7 +84,8 @@ public class CatalogFragment extends Fragment {
                 for (DocumentChange document : documentSnapshots.getDocumentChanges()) {
                     catalogPostItemarrayList.add(document.getDocument().toObject(CatalogItem.class));
                 }
-                Collections.reverse(catalogPostItemarrayList);
+//                Collections.reverse(catalogPostItemarrayList);
+                mProgressBar.setVisibility(View.GONE);
                 catalogRecyclerAdapter.notifyDataSetChanged();
 
             }
@@ -117,8 +120,8 @@ public class CatalogFragment extends Fragment {
                                 catalogPostItemarrayList.add(document.toObject(CatalogItem.class));
                             }
                         }
-                        Collections.reverse(catalogPostItemarrayList);
-
+//                        Collections.reverse(catalogPostItemarrayList);
+                        mProgressBar.setVisibility(View.GONE);
                         catalogRecyclerAdapter.notifyDataSetChanged();
                     }
                 });

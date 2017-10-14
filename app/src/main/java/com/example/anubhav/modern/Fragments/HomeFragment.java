@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.anubhav.modern.Adapters.HomeRecyclerAdapter;
@@ -35,7 +36,6 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Collections;
 
 /**
  * Created by Anubhav on 25-08-2017.
@@ -51,6 +51,7 @@ public class HomeFragment extends Fragment {
     ArrayList<UserItem> userItems;
     ArrayList<String> usersInOrderOfPosts;
     FirebaseFirestore db;
+    ProgressBar mProgressBar;
 
 
     public HomeFragment() {
@@ -67,6 +68,7 @@ public class HomeFragment extends Fragment {
         if (mUserSharedPreferences.getBoolean(ApplicationConstants.loginState, false)) {
             View v = inflater.inflate(R.layout.home_recyclerview, container, false);
             homeRecyclerView = v.findViewById(R.id.homefragment_recyclerView);
+            mProgressBar = v.findViewById(R.id.home_fragment_progress);
             homePostsArrayList = new ArrayList<>();
             userItems = new ArrayList<>();
             usersInOrderOfPosts = new ArrayList<>();
@@ -76,8 +78,12 @@ public class HomeFragment extends Fragment {
                     .setPersistenceEnabled(true)
                     .build();
             db.setFirestoreSettings(settings);
+
+//            getHomePosts();
+//            getUsers();
             db.collection("homeposts")
                     .orderBy("epoch", Query.Direction.DESCENDING)
+                    .limit(150)
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
@@ -88,7 +94,9 @@ public class HomeFragment extends Fragment {
                     for (DocumentChange document : documentSnapshots.getDocumentChanges()) {
                         homePostsArrayList.add(document.getDocument().toObject(PostItem.class));
                     }
-                    Collections.reverse(homePostsArrayList);
+
+//                    Collections.reverse(homePostsArrayList);
+                    mProgressBar.setVisibility(View.GONE);
                     homeRecyclerAdapter.notifyDataSetChanged();
                 }
             });
@@ -118,6 +126,7 @@ public class HomeFragment extends Fragment {
                         @Override
                         public void run() {
                             fragmentManager.beginTransaction().replace(R.id.content, new HomeUploaderFragment()).commit();
+
                         }
                     });
                     thread.start();
@@ -156,6 +165,7 @@ public class HomeFragment extends Fragment {
     public void getHomePosts() {
         db.collection("homeposts")
                 .orderBy("epoch", Query.Direction.DESCENDING)
+                .limit(150)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -167,8 +177,9 @@ public class HomeFragment extends Fragment {
                                 homePostsArrayList.add(document.toObject(PostItem.class));
                             }
                         }
-                        Collections.reverse(homePostsArrayList);
+//                        Collections.reverse(homePostsArrayList);
 
+                        mProgressBar.setVisibility(View.GONE);
                         homeRecyclerAdapter.notifyDataSetChanged();
                     }
                 });

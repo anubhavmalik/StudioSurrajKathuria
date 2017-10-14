@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.example.anubhav.modern.Models.PostItem;
 import com.example.anubhav.modern.Models.UserItem;
 import com.example.anubhav.modern.R;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -35,6 +37,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapter.HomeViewHolder> {
     int width;
     FirebaseFirestore db;
+    UserItem userItem;
     private Context mContext;
     private ArrayList<PostItem> arrayList;
     private HomeClickListener mClickListener;
@@ -43,7 +46,7 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
     public HomeRecyclerAdapter(Context mContext, ArrayList<PostItem> arrayList, HomeClickListener mClickListener) {
         this.mContext = mContext;
         this.arrayList = arrayList;
-        this.mClickListener=mClickListener;
+        this.mClickListener = mClickListener;
         DisplayMetrics displayMetrics = new DisplayMetrics();
         width = displayMetrics.widthPixels;
         db = FirebaseFirestore.getInstance();
@@ -52,8 +55,8 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
 
     @Override
     public HomeViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(mContext).inflate(R.layout.homecardlayout, parent, false);
-        return  new HomeViewHolder(itemView,mClickListener);
+        View itemView = LayoutInflater.from(mContext).inflate(R.layout.home_card_layout, parent, false);
+        return new HomeViewHolder(itemView, mClickListener);
     }
 
     @Override
@@ -82,15 +85,13 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.postImageView);
 
-//        UserItem userItem =db.collection("users").document(postItem.getBy_userNumber()).get().getResult().toObject(UserItem.class);
-//        UserItem user;
-//
+
         db.collection("users").document(postItem.getBy_userNumber()).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                         if (task.isSuccessful()) {
-                            UserItem userItem = task.getResult().toObject(UserItem.class);
+                            userItem = task.getResult().toObject(UserItem.class);
                             Glide.with(mContext.getApplicationContext())
                                     .load(userItem.getPhotourl())
                                     .asBitmap()
@@ -101,8 +102,13 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
                             holder.homeUserTextView.setText(userItem.getName());
                         }
                     }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.d("PICTUREFETCHADAPTER", "Fetch has failed ");
+                    }
                 });
-
 
 
     }

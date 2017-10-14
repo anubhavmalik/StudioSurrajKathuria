@@ -5,32 +5,49 @@
     android:layout_height="match_parent">
 
 
-    <me.grantland.widget.AutofitTextView
-        android:id="@+id/guest_note_textView"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:text="You have to sign in to view this section of the application"
-        android:textColor="#FFFFFF"
-        android:textStyle="italic"
-        app:layout_constraintBottom_toTopOf="@+id/home_login_button"
-        app:layout_constraintLeft_toLeftOf="@+id/home_login_button"
-        app:layout_constraintRight_toRightOf="@+id/home_login_button" />
 
     <ImageView
-
         android:id="@+id/imageView"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_below="@+id/guest_note_textView"
         android:scaleType="centerCrop"
         android:src="@drawable/studioentrance"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="29dp"
+        android:src="@drawable/headeing_after"
+        app:layout_constraintRight_toLeftOf="@+id/imageView5"
+        app:layout_constraintTop_toTopOf="@+id/imageView5" />
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="0dp"
+        android:layout_marginTop="0dp"
+        android:src="@drawable/headeing_before"
+        app:layout_constraintLeft_toRightOf="@+id/imageView5"
+        app:layout_constraintTop_toTopOf="@+id/imageView6" />
+
+    <ImageView
+        android:id="@+id/imageView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:src="@drawable/for_footer_1"
+        app:layout_constraintBottom_toTopOf="@+id/home_login_button"
+        app:layout_constraintHorizontal_bias="0.502"
+        app:layout_constraintLeft_toLeftOf="@+id/home_login_button"
+        app:layout_constraintRight_toRightOf="@+id/home_login_button" />
 
     <Button
         android:id="@+id/home_login_button"
@@ -40,7 +57,7 @@
         android:layout_marginLeft="0dp"
         android:layout_marginRight="0dp"
         android:layout_marginTop="8dp"
-        android:text="Login"
+        android:text="Login to access"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
