@@ -12,7 +12,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
-
     <uses-permission-sdk-23 android:name="android.permission.READ_SMS" />
     <uses-permission-sdk-23 android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission-sdk-23 android:name="android.permission.READ_PROFILE" />
@@ -23,7 +22,6 @@
     <uses-permission-sdk-23 android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
 
     <application
         android:allowBackup="true"
@@ -43,21 +41,18 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".Visible.Login"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Transparent">
-
-        </activity>
+            android:theme="@style/Theme.Transparent"></activity>
         <activity android:name=".Visible.GetDetailsActivity" />
 
         <receiver
             android:name=".BroadcastRecievers.ConnectivityBroadcastReceiver"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"></receiver>
 
-        </receiver>
+        <activity android:name=".Visible.OtpManual"></activity>
     </application>
 
 </manifest>

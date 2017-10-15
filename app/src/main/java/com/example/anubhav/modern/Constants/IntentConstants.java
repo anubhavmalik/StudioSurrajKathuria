@@ -6,4 +6,5 @@ package com.example.anubhav.modern.Constants;
 
 public class IntentConstants {
     public static final String phoneNumberText = "phone_number_editText_mainActivity";
+    public static final String otpRequest = "otp_request";
 }

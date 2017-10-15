@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -21,8 +22,11 @@ import com.example.anubhav.modern.Constants.ApplicationConstants;
 import com.example.anubhav.modern.Constants.IntentConstants;
 import com.example.anubhav.modern.MainActivity;
 import com.example.anubhav.modern.R;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
@@ -32,6 +36,7 @@ import com.google.firebase.auth.PhoneAuthProvider;
 import java.util.concurrent.TimeUnit;
 
 public class Login extends AppCompatActivity {
+    private static final int OTP_REQUEST = 101;
     public SharedPreferences mLoginSharedPreferences;//, mPhoneNumberSharedPreferences, mFirstLoginSharedPreference;
     ProgressBar mProgressBar;
     String mVerificationId;
@@ -109,8 +114,25 @@ public class Login extends AppCompatActivity {
             public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 mVerificationId = s;
                 mResendToken = forceResendingToken;
-                mLoginButton.setBackgroundColor(getResources().getColor(R.color.logincolor));
-                mLoginButton.setText("Waiting to detect OTP");
+//                mLoginButton.setBackgroundColor(getResources().getColor(R.color.logincolor));
+                mLoginButton.setEnabled(false);
+                new CountDownTimer(60000, 1000) {
+
+                    public void onTick(long millisUntilFinished) {
+                        mLoginButton.setText("Detecting OTP, you can enter manually in" + millisUntilFinished / 1000 + "s");
+
+                    }
+
+                    public void onFinish() {
+                        Intent i = new Intent(Login.this, OtpManual.class);
+                        startActivityForResult(i, OTP_REQUEST);
+                        i.putExtra("veri_id", mVerificationId);
+
+
+                    }
+
+                }.start();
+//                mLoginButton.setText("Waiting to detect OTP, enter manually in");
             }
 
             @Override
@@ -129,20 +151,40 @@ public class Login extends AppCompatActivity {
                     Toast.makeText(Login.this, "Try Again", Toast.LENGTH_SHORT).show();
 
                 }
-                Toast.makeText(Login.this, "Check internet connection.", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(Login.this, "Check internet connection.", Toast.LENGTH_SHORT).show();
 
                 touchEnabled();
                 mLoginButton.setText(R.string.tryagain);
                 mProgressBar.setVisibility(View.INVISIBLE);
             }
         };
-        PhoneAuthProvider.getInstance().verifyPhoneNumber("+91" + mPhoneEditText.getText().toString(), 2, TimeUnit.MINUTES, this, mCallbacks);
+        PhoneAuthProvider.getInstance()
+                .verifyPhoneNumber
+                        ("+91" + mPhoneEditText.getText().toString()
+                                , 1
+                                , TimeUnit.MINUTES
+                                , this
+                                , mCallbacks);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == OTP_REQUEST && RESULT_OK == resultCode) {
+            PhoneAuthCredential credential = new PhoneAuthCredential(mVerificationId, data.getStringExtra(IntentConstants.otpRequest));
+            signInWithPhoneAuthCredential(credential);
+
+        }
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
+        showProgress(false);
+        touchEnabled();
         mAuth.addAuthStateListener(mAuthListener);
+
     }
 
     @Override
@@ -196,4 +238,37 @@ public class Login extends AppCompatActivity {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showProgress(false);
+        mLoginButton.setEnabled(true);
+        mLoginButton.setText(R.string.login_text);
+
+    }
+
+    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            startActivity(new Intent(Login.this, GetDetailsActivity.class));
+
+                            FirebaseUser user = task.getResult().getUser();
+                            // ...
+                        } else {
+                            touchEnabled();
+                            mLoginButton.setText("Try Again");
+                            // Sign in failed, display a message and update the UI
+//                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
+                                // The verification code entered was invalid
+                                touchEnabled();
+                                Snackbar.make(mLoginButton, "Invalid otp entered", Snackbar.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
+    }
 }
