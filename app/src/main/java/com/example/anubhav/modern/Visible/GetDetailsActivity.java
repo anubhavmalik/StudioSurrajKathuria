@@ -3,7 +3,9 @@ package com.example.anubhav.modern.Visible;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BaseTransientBottomBar;
@@ -33,7 +35,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class GetDetailsActivity extends AppCompatActivity {
 
-    final int RC_PHOTO_PICKER = 26;
+    private static final int RC_PHOTO_PICKER = 26;
+    private static final int REQUEST_READ_PERMISSION = 696;
     EditText nameEditText;
     TextView numberEditText;
     ImageView editPhotoImageView;
@@ -69,21 +72,28 @@ public class GetDetailsActivity extends AppCompatActivity {
         circleImageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-//                intent.setType("image/jpeg");
-//                intent.putExtra(Intent.EXTRA_LOCAL_ONLY, true);
-//                startActivityForResult(Intent.createChooser(intent, "Complete action using"), RC_PHOTO_PICKER);
+//                if (ContextCompat.checkSelfPermission(GetDetailsActivity.this,
+//                        Manifest.permission.READ_EXTERNAL_STORAGE)
+//                        != PackageManager.PERMISSION_GRANTED) {
+//
+//
+//                    if (ActivityCompat.shouldShowRequestPermissionRationale(GetDetailsActivity.this,
+//                            Manifest.permission.READ_EXTERNAL_STORAGE)) {
+//
+//                        // Show an explanation to the user *asynchronously* -- don't block
+//                        // this thread waiting for the user's response! After the user
+//                        // sees the explanation, try again to request the permission.
+//
+//                    }
 
-                Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-                getIntent.setType("image/*");
 
-                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                pickIntent.setType("image/*");
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requestPermissions(new String[]{android.Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_READ_PERMISSION);
+                } else {
+                    openImagePicker();
+                }
 
-                Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-                chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
 
-                startActivityForResult(chooserIntent, RC_PHOTO_PICKER);
             }
 
         });
@@ -142,6 +152,20 @@ public class GetDetailsActivity extends AppCompatActivity {
         });
     }
 
+    private void openImagePicker() {
+        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+        getIntent.setType("image/*");
+
+        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        pickIntent.setType("image/*");
+
+        Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
+
+        startActivityForResult(chooserIntent, RC_PHOTO_PICKER);
+
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == RC_PHOTO_PICKER) {
@@ -149,6 +173,18 @@ public class GetDetailsActivity extends AppCompatActivity {
                 selectedImageUri = data.getData();
                 circleImageView.setImageURI(selectedImageUri);
                 imageSelected = true;
+            }
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_READ_PERMISSION) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openImagePicker();
+            } else if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+
             }
         }
     }

@@ -155,6 +155,7 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
             if (position != RecyclerView.NO_POSITION) {
                 if (id == R.id.home_cardLayout) {
                     onClickListener.onItemClick(view, position);
+
                 }
             }
 

@@ -89,7 +89,11 @@ public class Login extends AppCompatActivity {
                 public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                     FirebaseUser user = firebaseAuth.getCurrentUser();
                     if (user != null) {
-                        goToMainAcivity();
+                        if (mLoginSharedPreferences.getBoolean(ApplicationConstants.firstLogin, true) == true) {
+                            startActivity(new Intent(Login.this, GetDetailsActivity.class));
+                        } else {
+                            goToMainAcivity();
+                        }
                     } else {
                         Snackbar.make(mLoginButton, "Sign in to continue", Snackbar.LENGTH_LONG).show();
                     }
@@ -108,15 +112,15 @@ public class Login extends AppCompatActivity {
                 mLoginSharedPreferences.edit().putString(ApplicationConstants.phoneNumber, mPhoneEditText.getText().toString()).apply();
                 touchEnabled();
                 startActivity(new Intent(Login.this, GetDetailsActivity.class));
+                finish();
             }
 
             @Override
             public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
                 mVerificationId = s;
                 mResendToken = forceResendingToken;
-//                mLoginButton.setBackgroundColor(getResources().getColor(R.color.logincolor));
                 mLoginButton.setEnabled(false);
-                new CountDownTimer(60000, 1000) {
+                new CountDownTimer(20000, 1000) {
 
                     public void onTick(long millisUntilFinished) {
                         mLoginButton.setText("Detecting OTP, you can enter manually in" + millisUntilFinished / 1000 + "s");
@@ -124,15 +128,13 @@ public class Login extends AppCompatActivity {
                     }
 
                     public void onFinish() {
-                        Intent i = new Intent(Login.this, OtpManual.class);
-                        startActivityForResult(i, OTP_REQUEST);
-                        i.putExtra("veri_id", mVerificationId);
-
-
+                        if (mLoginSharedPreferences.getString(ApplicationConstants.phoneNumber, null) == null) {
+                            Intent i = new Intent(Login.this, OtpManual.class);
+                            startActivityForResult(i, OTP_REQUEST);
+                        }
                     }
 
                 }.start();
-//                mLoginButton.setText("Waiting to detect OTP, enter manually in");
             }
 
             @Override
@@ -151,7 +153,6 @@ public class Login extends AppCompatActivity {
                     Toast.makeText(Login.this, "Try Again", Toast.LENGTH_SHORT).show();
 
                 }
-//                Toast.makeText(Login.this, "Check internet connection.", Toast.LENGTH_SHORT).show();
 
                 touchEnabled();
                 mLoginButton.setText(R.string.tryagain);
@@ -200,7 +201,9 @@ public class Login extends AppCompatActivity {
     }
 
     private void goToMainAcivity() {
+
         Snackbar.make(mLoginButton, "Welcome", Snackbar.LENGTH_SHORT).show();
+
         if (mProgressBar.isShown())
             mProgressBar.setVisibility(View.INVISIBLE);
         Handler h = new Handler();
@@ -219,14 +222,11 @@ public class Login extends AppCompatActivity {
     }
 
     public void touchDisabled() {
-//        getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-//                WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         mPhoneEditText.setEnabled(false);
         mLoginButton.setEnabled(false);
     }
 
     public void touchEnabled() {
-//        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         mPhoneEditText.setEnabled(true);
         mLoginButton.setEnabled(true);
     }
@@ -254,8 +254,9 @@ public class Login extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             startActivity(new Intent(Login.this, GetDetailsActivity.class));
+                            mLoginSharedPreferences.edit().putString(ApplicationConstants.phoneNumber, mPhoneEditText.getText().toString()).apply();
 
-                            FirebaseUser user = task.getResult().getUser();
+//                            FirebaseUser user = task.getResult().getUser();
                             // ...
                         } else {
                             touchEnabled();

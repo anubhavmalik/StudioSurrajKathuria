@@ -70,6 +70,7 @@ public class HomeFragment extends Fragment {
             homeRecyclerView = v.findViewById(R.id.homefragment_recyclerView);
             mProgressBar = v.findViewById(R.id.home_fragment_progress);
             homePostsArrayList = new ArrayList<>();
+            mProgressBar.setVisibility(View.VISIBLE);
             userItems = new ArrayList<>();
             usersInOrderOfPosts = new ArrayList<>();
             floatingActionButton = v.findViewById(R.id.fab);
@@ -79,11 +80,10 @@ public class HomeFragment extends Fragment {
                     .build();
             db.setFirestoreSettings(settings);
 
-//            getHomePosts();
-//            getUsers();
+
             db.collection("homeposts")
                     .orderBy("epoch", Query.Direction.DESCENDING)
-                    .limit(150)
+                    .limit(250)
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
@@ -95,26 +95,12 @@ public class HomeFragment extends Fragment {
                         homePostsArrayList.add(document.getDocument().toObject(PostItem.class));
                     }
 
-//                    Collections.reverse(homePostsArrayList);
                     mProgressBar.setVisibility(View.GONE);
                     homeRecyclerAdapter.notifyDataSetChanged();
                 }
             });
-//            db.collection("users")
-//                    .addSnapshotListener(new EventListener<QuerySnapshot>() {
-//                        @Override
-//                        public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-//                            if (e != null) {
-//                                return;
-//                            }
-//                            userItems.clear();
-//                            for (DocumentChange document : documentSnapshots.getDocumentChanges()) {
-//                                userItems.add(document.getDocument().toObject(UserItem.class));
-//                            }
-//                        }
-//                    });
+
             getHomePosts();
-//            getUsers();
 
             final FragmentManager fragmentManager = getFragmentManager();
 
@@ -146,10 +132,9 @@ public class HomeFragment extends Fragment {
 
             return v;
         } else {
-            //TODO: ADD A LAYOUT HERE TO INFLATE IF USER IS NOT SIGNED IN.
             View v = inflater.inflate(R.layout.guest_home, container, false);
             guestLoginButton = v.findViewById(R.id.home_login_button);
-            guestLoginButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            guestLoginButton.setBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
             guestLoginButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -165,7 +150,7 @@ public class HomeFragment extends Fragment {
     public void getHomePosts() {
         db.collection("homeposts")
                 .orderBy("epoch", Query.Direction.DESCENDING)
-                .limit(150)
+                .limit(250)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -177,35 +162,10 @@ public class HomeFragment extends Fragment {
                                 homePostsArrayList.add(document.toObject(PostItem.class));
                             }
                         }
-//                        Collections.reverse(homePostsArrayList);
-
                         mProgressBar.setVisibility(View.GONE);
                         homeRecyclerAdapter.notifyDataSetChanged();
                     }
                 });
     }
-
-//    public void getUsers(){
-//        db.collection("users")
-//                .get()
-//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                        if(task.isSuccessful()){
-//                            for( DocumentSnapshot documentSnapshot : task.getResult()){
-//                                userItems.add(documentSnapshot.toObject(UserItem.class));
-//                            }
-//                        }
-//                    }
-//                });
-//    }
-//    public void sortUsers(){
-//        int position;
-//        for(int i=0;i<homePostsArrayList.size();i++){
-//            usersInOrderOfPosts.add(homePostsArrayList.get(i).getBy_userNumber());
-//        }
-//        userItems.get(usersInOrderOfPosts.)
-//    }
-
 
 }

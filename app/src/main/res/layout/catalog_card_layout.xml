@@ -25,7 +25,6 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="3dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/surrajkathurialogo"
             app:layout_constraintDimensionRatio=""
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"

@@ -30,6 +30,7 @@
         android:layout_marginTop="8dp"
         android:gravity="center"
         android:hint="Enter OTP"
+        android:textColor="@color/hintColor"
         android:textColorHint="@color/hintColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"

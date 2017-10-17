@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.anubhav.modern.Fragments.CatalogFragment;
 import com.example.anubhav.modern.Fragments.HomeFragment;
@@ -22,13 +23,12 @@ import com.google.firebase.firestore.FirebaseFirestoreSettings;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-    final int getDetailRequest = 140;
     HomeFragment homeFragment;
     CatalogFragment catalogFragment;
     ProfileFragment profileFragment;
     InquiryFragment inquiryFragment;
     boolean startup;
-    String phoneNumber;
+    int exitCode = 1;
     ArrayList<PostItem> homePostsArrayList;
     FirebaseFirestore db;
 
@@ -70,6 +70,18 @@ public class MainActivity extends AppCompatActivity {
         }
 
     };
+
+    @Override
+    public void onBackPressed() {
+
+        if (exitCode > 0) {
+            Toast.makeText(this, "Press one more time to exit.", Toast.LENGTH_SHORT).show();
+            exitCode--;
+        } else if (exitCode == 0) {
+            finish();
+        }
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

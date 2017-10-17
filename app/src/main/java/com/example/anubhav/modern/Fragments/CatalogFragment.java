@@ -3,16 +3,18 @@ package com.example.anubhav.modern.Fragments;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.example.anubhav.modern.Adapters.CatalogRecyclerAdapter;
 import com.example.anubhav.modern.Models.CatalogItem;
@@ -42,7 +44,7 @@ public class CatalogFragment extends Fragment {
     CatalogRecyclerAdapter catalogRecyclerAdapter;
     FirebaseFirestore db;
     ProgressBar mProgressBar;
-    FloatingActionButton floatingActionButton;
+//    FloatingActionButton floatingActionButton;
 
 
     @Nullable
@@ -50,31 +52,31 @@ public class CatalogFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.catalog_recyclerview, container, false);
         catalogRecyclerView = v.findViewById(R.id.catalog_recyclerViewList);
-        floatingActionButton = v.findViewById(R.id.catalog_fab);
+/**        floatingActionButton = v.findViewById(R.id.catalog_fab); */
         mProgressBar = v.findViewById(R.id.catalog_fragment_progress);
         catalogPostItemarrayList = new ArrayList<>();
         db = FirebaseFirestore.getInstance();
-        final FragmentManager fragmentManager = getFragmentManager();
-        floatingActionButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Thread thread = new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        fragmentManager.beginTransaction().replace(R.id.content, new CatalogUploaderFragment()).commit();
-                    }
-                });
-                thread.start();
-            }
-
-        });
+/**        final FragmentManager fragmentManager = getFragmentManager();
+ //        floatingActionButton.setOnClickListener(new View.OnClickListener() {
+ //            @Override
+ //            public void onClick(View view) {
+ //                Thread thread = new Thread(new Runnable() {
+ //                    @Override
+ //                    public void run() {
+ //                        fragmentManager.beginTransaction().replace(R.id.content, new CatalogUploaderFragment()).commit();
+ //                    }
+ //                });
+ //                thread.start();
+ //            }
+ //
+ //        });*/
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(true)
                 .build();
         db.setFirestoreSettings(settings);
         db.collection("catalogposts")
                 .orderBy("epoch", Query.Direction.DESCENDING)
-                .limit(80)
+                .limit(100)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
@@ -84,7 +86,6 @@ public class CatalogFragment extends Fragment {
                 for (DocumentChange document : documentSnapshots.getDocumentChanges()) {
                     catalogPostItemarrayList.add(document.getDocument().toObject(CatalogItem.class));
                 }
-//                Collections.reverse(catalogPostItemarrayList);
                 mProgressBar.setVisibility(View.GONE);
                 catalogRecyclerAdapter.notifyDataSetChanged();
 
@@ -93,10 +94,11 @@ public class CatalogFragment extends Fragment {
         getCatalogPosts();
 
 
+
         catalogRecyclerAdapter = new CatalogRecyclerAdapter(getContext(), catalogPostItemarrayList, new CatalogRecyclerAdapter.CatalogClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(getContext(), "CatalogItemClicked", Toast.LENGTH_SHORT).show();
+                Snackbar.make(mProgressBar, "Item Clicked", Snackbar.LENGTH_SHORT).show();
             }
         });
         catalogRecyclerView.setAdapter(catalogRecyclerAdapter);
@@ -107,7 +109,7 @@ public class CatalogFragment extends Fragment {
 
     public void getCatalogPosts() {
         db.collection("catalogposts")
-                .limit(80)
+                .limit(100)
                 .orderBy("epoch", Query.Direction.DESCENDING)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -120,11 +122,25 @@ public class CatalogFragment extends Fragment {
                                 catalogPostItemarrayList.add(document.toObject(CatalogItem.class));
                             }
                         }
-//                        Collections.reverse(catalogPostItemarrayList);
                         mProgressBar.setVisibility(View.GONE);
                         catalogRecyclerAdapter.notifyDataSetChanged();
                     }
                 });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.catalog_menu_about_us) {
+            FragmentManager fragmentManager = getFragmentManager();
+            fragmentManager.beginTransaction().replace(R.id.content, new AboutUsFragment()).commit();
+        }
+        return true;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.catalog_menu, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+
+    }
 }
