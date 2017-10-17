@@ -52,6 +52,7 @@ public class CatalogFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.catalog_recyclerview, container, false);
         catalogRecyclerView = v.findViewById(R.id.catalog_recyclerViewList);
+        setHasOptionsMenu(true);
 /**        floatingActionButton = v.findViewById(R.id.catalog_fab); */
         mProgressBar = v.findViewById(R.id.catalog_fragment_progress);
         catalogPostItemarrayList = new ArrayList<>();
@@ -78,21 +79,20 @@ public class CatalogFragment extends Fragment {
                 .orderBy("epoch", Query.Direction.DESCENDING)
                 .limit(100)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                if (e != null) {
-                    return;
-                }
-                for (DocumentChange document : documentSnapshots.getDocumentChanges()) {
-                    catalogPostItemarrayList.add(document.getDocument().toObject(CatalogItem.class));
-                }
-                mProgressBar.setVisibility(View.GONE);
-                catalogRecyclerAdapter.notifyDataSetChanged();
+                    @Override
+                    public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                        if (e != null) {
+                            return;
+                        }
+                        for (DocumentChange document : documentSnapshots.getDocumentChanges()) {
+                            catalogPostItemarrayList.add(document.getDocument().toObject(CatalogItem.class));
+                        }
+                        mProgressBar.setVisibility(View.GONE);
+                        catalogRecyclerAdapter.notifyDataSetChanged();
 
-            }
-        });
+                    }
+                });
         getCatalogPosts();
-
 
 
         catalogRecyclerAdapter = new CatalogRecyclerAdapter(getContext(), catalogPostItemarrayList, new CatalogRecyclerAdapter.CatalogClickListener() {
@@ -129,6 +129,15 @@ public class CatalogFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.catalog_menu, menu);
+
+
+        super.onCreateOptionsMenu(menu, inflater);
+
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.catalog_menu_about_us) {
             FragmentManager fragmentManager = getFragmentManager();
@@ -137,10 +146,5 @@ public class CatalogFragment extends Fragment {
         return true;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.catalog_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
 
-    }
 }

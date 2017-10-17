@@ -3,6 +3,7 @@ package com.example.anubhav.modern;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
@@ -28,11 +29,9 @@ public class MainActivity extends AppCompatActivity {
     ProfileFragment profileFragment;
     InquiryFragment inquiryFragment;
     boolean startup;
-    int exitCode = 1;
     ArrayList<PostItem> homePostsArrayList;
     FirebaseFirestore db;
-
-
+    private boolean doubleBackToExitPressedOnce;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -74,12 +73,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
-        if (exitCode > 0) {
-            Toast.makeText(this, "Press one more time to exit.", Toast.LENGTH_SHORT).show();
-            exitCode--;
-        } else if (exitCode == 0) {
-            finish();
+
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
         }
+
+        doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Press one more time to exit.", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
 
     }
 
@@ -97,10 +105,6 @@ public class MainActivity extends AppCompatActivity {
                 .setPersistenceEnabled(true)
                 .build();
         db.setFirestoreSettings(settings);
-//        navigation.setItemTextColor(getResources().getColor(R.color.hintColor));
-
-
-//        phoneNumber = getIntent().getStringExtra(IntentConstants.phoneNumberText);
 
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
@@ -110,7 +114,6 @@ public class MainActivity extends AppCompatActivity {
         profileFragment = new ProfileFragment();
         inquiryFragment = new InquiryFragment();
 
-        //Default page on opening
         navigation.setSelectedItemId(R.id.navigation_catalog);
 
 
@@ -119,9 +122,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == getDetailRequest && resultCode == RESULT_OK) {
-//            setFragment(homeFragment);
-//        }
     }
 
     public void setFragment(Fragment fragment) {

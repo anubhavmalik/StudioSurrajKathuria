@@ -23,6 +23,9 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.example.anubhav.modern.Constants.ApplicationConstants;
 import com.example.anubhav.modern.Models.UserItem;
 import com.example.anubhav.modern.R;
@@ -50,12 +53,13 @@ public class ProfileFragment extends Fragment {
     EditText numberTextView;
     Uri selectedImageUri;
     CircleImageView circleImageView;
-    ProgressBar mProgressbar;
+    ProgressBar mProgressbar, imageProgressBar;
     ListView mListView;
     Button saveButton, guestLoginButton;
     boolean imageChanged = false, nameChanged = false;
     ArrayList<String> mArrayList;
     ArrayAdapter<String> arrayAdapter;
+    Button signOutButton;
     StorageReference userStorageRef;
     String currentImageURL;
     SharedPreferences mUserDetailsSharedPreferences;
@@ -109,8 +113,9 @@ public class ProfileFragment extends Fragment {
             saveButton = v.findViewById(R.id.profile_save);
             circleImageView = v.findViewById(R.id.profile_image);
             mListView = v.findViewById(R.id.profile_listView);
+            imageProgressBar = v.findViewById(R.id.profile_image_progress);
             mProgressbar = v.findViewById(R.id.profile_fragment_progress);
-
+//            signOutButton=v.findViewById(R.id.profile_si);
             final InquiryFragment inquiryFragment = new InquiryFragment();
 
             numberTextView.setEnabled(false);
@@ -123,6 +128,18 @@ public class ProfileFragment extends Fragment {
 
             Glide.with(getContext().getApplicationContext())
                     .load(mUserDetailsSharedPreferences.getString(ApplicationConstants.userPhotoUrl, null))
+                    .listener(new RequestListener<String, GlideDrawable>() {
+                        @Override
+                        public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+                            imageProgressBar.setVisibility(View.GONE);
+                            return false;
+                        }
+                    })
                     .into(circleImageView);
 
 
@@ -302,7 +319,6 @@ public class ProfileFragment extends Fragment {
         if (item.getItemId() == R.id.profile_edit) {
             enableViews(true);
         }
-
         return true;
     }
 
@@ -311,5 +327,6 @@ public class ProfileFragment extends Fragment {
         nameTextView.setEnabled(b);
         circleImageView.setEnabled(b);
         saveButton.setVisibility(b ? View.VISIBLE : View.GONE);
+        saveButton.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
     }
 }

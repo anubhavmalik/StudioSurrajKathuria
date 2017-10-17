@@ -140,8 +140,9 @@ public class HomeUploaderFragment extends Fragment implements ActivityCompat.OnR
                                             Thread thread = new Thread(new Runnable() {
                                                 @Override
                                                 public void run() {
-                                                    HomeFragment homeFragment = new HomeFragment();
-                                                    getFragmentManager().beginTransaction().replace(R.id.content, homeFragment).commit();
+//                                                    HomeFragment homeFragment = new HomeFragment();
+//                                                    getFragmentManager().beginTransaction().replace(R.id.content, homeFragment).commit();
+                                                    getFragmentManager().popBackStackImmediate();
                                                 }
                                             });
                                             thread.start();
