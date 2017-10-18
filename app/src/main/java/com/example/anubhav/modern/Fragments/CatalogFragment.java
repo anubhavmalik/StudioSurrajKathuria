@@ -53,24 +53,24 @@ public class CatalogFragment extends Fragment {
         View v = inflater.inflate(R.layout.catalog_recyclerview, container, false);
         catalogRecyclerView = v.findViewById(R.id.catalog_recyclerViewList);
         setHasOptionsMenu(true);
-/**        floatingActionButton = v.findViewById(R.id.catalog_fab); */
+//        floatingActionButton = v.findViewById(R.id.catalog_fab);
         mProgressBar = v.findViewById(R.id.catalog_fragment_progress);
         catalogPostItemarrayList = new ArrayList<>();
         db = FirebaseFirestore.getInstance();
-/**        final FragmentManager fragmentManager = getFragmentManager();
- //        floatingActionButton.setOnClickListener(new View.OnClickListener() {
- //            @Override
- //            public void onClick(View view) {
- //                Thread thread = new Thread(new Runnable() {
- //                    @Override
- //                    public void run() {
- //                        fragmentManager.beginTransaction().replace(R.id.content, new CatalogUploaderFragment()).commit();
- //                    }
- //                });
- //                thread.start();
- //            }
- //
- //        });*/
+//        final FragmentManager fragmentManager = getFragmentManager();
+//         floatingActionButton.setOnClickListener(new View.OnClickListener() {
+//             @Override
+//             public void onClick(View view) {
+//                 Thread thread = new Thread(new Runnable() {
+//                     @Override
+//                     public void run() {
+//                         fragmentManager.beginTransaction().replace(R.id.content, new CatalogUploaderFragment()).commit();
+//                     }
+//                 });
+//                 thread.start();
+//             }
+//
+//         });
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(true)
                 .build();

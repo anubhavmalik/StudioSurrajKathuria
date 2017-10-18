@@ -1,4 +1,4 @@
-package com.example.anubhav.modern.Visible;
+package com.example.anubhav.modern.VisibleActivities;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;

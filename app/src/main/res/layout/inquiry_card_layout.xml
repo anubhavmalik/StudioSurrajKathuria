@@ -22,6 +22,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginTop="0dp"
+            android:textColor="@color/hintColor"
             app:layout_constraintLeft_toRightOf="@+id/inquiry_user_textView"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/inquiry_user_textView" />
@@ -33,6 +34,7 @@
             android:layout_marginLeft="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
+            android:textColor="@color/hintColor"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -47,6 +49,7 @@
             android:layout_marginTop="0dp"
             android:gravity="end"
             android:text="time"
+            android:textColor="@color/hintColor"
             android:textStyle="bold"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="@+id/inquiry_date_textView" />
@@ -64,6 +67,7 @@
             android:layout_weight="0.06"
             android:maxLines="3"
             android:text="This is where we have the inquiries by users."
+            android:textColor="@color/hintColor"
             app:layout_constraintLeft_toLeftOf="@+id/inquiry_user_textView"
             app:layout_constraintRight_toRightOf="@+id/inquiry_time_textView"
             app:layout_constraintTop_toBottomOf="@+id/inquiry_date_textView" />
@@ -76,6 +80,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:text="date"
+            android:textColor="@color/hintColor"
             android:textStyle="bold"
             app:layout_constraintLeft_toLeftOf="@+id/inquiry_user_textView"
             app:layout_constraintTop_toBottomOf="@+id/inquiry_user_textView" />

@@ -1,4 +1,4 @@
-package com.example.anubhav.modern.Visible;
+package com.example.anubhav.modern.VisibleActivities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,8 +8,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.BaseTransientBottomBar;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
@@ -115,6 +113,9 @@ public class GetDetailsActivity extends AppCompatActivity {
                     mUserStorageReference = mStorageReference.child(getString(R.string.userStorage)).child(phoneNumber + "profile_image");
                     showProgress(true);
                     mProgressBar.start();
+                    saveButton.setEnabled(false);
+                    nameEditText.setEnabled(false);
+                    circleImageView.setEnabled(false);
                     Toast.makeText(GetDetailsActivity.this, "Please wait, this will take a while.", Toast.LENGTH_LONG).show();
                     mUserStorageReference.putFile(selectedImageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                         @Override
@@ -137,13 +138,14 @@ public class GetDetailsActivity extends AppCompatActivity {
                                             startActivity(new Intent(GetDetailsActivity.this, MainActivity.class));
                                             finish();
 
-                                            Snackbar.make(saveButton, "Congratulations you are now registered !", Snackbar.LENGTH_SHORT).addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
-                                                @Override
-                                                public void onDismissed(Snackbar transientBottomBar, int event) {
-
-                                                }
-                                            }).show();
+//                                            Snackbar.make(saveButton, "Congratulations you are now registered !", Snackbar.LENGTH_SHORT).addCallback(new BaseTransientBottomBar.BaseCallback<Snackbar>() {
+//                                                @Override
+//                                                public void onDismissed(Snackbar transientBottomBar, int event) {
+//
+//                                                }
+//                                            }).show();
                                         }
+
                                     });
                         }
                     });

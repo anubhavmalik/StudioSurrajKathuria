@@ -40,17 +40,17 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Visible.Login"
+            android:name=".VisibleActivities.Login"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Transparent"></activity>
-        <activity android:name=".Visible.GetDetailsActivity" />
+        <activity android:name=".VisibleActivities.GetDetailsActivity" />
 
         <receiver
             android:name=".BroadcastRecievers.ConnectivityBroadcastReceiver"
             android:enabled="true"
             android:exported="true"></receiver>
 
-        <activity android:name=".Visible.OtpManual"></activity>
+        <activity android:name=".VisibleActivities.OtpManual"></activity>
     </application>
 
 </manifest>

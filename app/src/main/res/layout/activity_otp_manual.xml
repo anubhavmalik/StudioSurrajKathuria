@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#212121"
-    tools:context="com.example.anubhav.modern.Visible.OtpManual">
+    android:background="@color/colorPrimaryDark"
+    tools:context="com.example.anubhav.modern.VisibleActivities.OtpManual">
 
     <ImageView
         android:id="@+id/imageView3"

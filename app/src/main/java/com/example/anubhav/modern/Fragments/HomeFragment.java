@@ -1,6 +1,7 @@
 package com.example.anubhav.modern.Fragments;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,15 +18,15 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ProgressBar;
-import android.widget.Toast;
 
 import com.example.anubhav.modern.Adapters.HomeRecyclerAdapter;
 import com.example.anubhav.modern.Constants.ApplicationConstants;
 import com.example.anubhav.modern.Models.PostItem;
 import com.example.anubhav.modern.Models.UserItem;
 import com.example.anubhav.modern.R;
-import com.example.anubhav.modern.Visible.Login;
+import com.example.anubhav.modern.VisibleActivities.Login;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -52,8 +54,17 @@ public class HomeFragment extends Fragment {
     ArrayList<String> usersInOrderOfPosts;
     FirebaseFirestore db;
     ProgressBar mProgressBar;
+//    HomeListLongClickListener mListener;
 
-
+    //    interface HomeListLongClickListener{
+//
+//        void HomeItemLongClicked(PostItem postItem);
+//    }
+//
+//
+//    public void setHomeItemLongClickListener (HomeListLongClickListener listener){
+//        mListener=listener;
+//    }
     public HomeFragment() {
 
     }
@@ -120,10 +131,37 @@ public class HomeFragment extends Fragment {
             });
 
 
+
             homeRecyclerAdapter = new HomeRecyclerAdapter(getContext(), homePostsArrayList, new HomeRecyclerAdapter.HomeClickListener() {
                 @Override
-                public void onItemClick(View view, int position) {
-                    Toast.makeText(getContext(), "Handle the click", Toast.LENGTH_SHORT).show();
+                public void onHomeItemClick(View view, final int position) {
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    if (homePostsArrayList.get(position).getBy_userNumber() == mUserSharedPreferences.getString(ApplicationConstants.phoneNumber, null)) {
+                        builder.setCancelable(true);
+                        builder.setMessage("Are you sure you want to delete this post ?");
+                        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        });
+                        builder.setPositiveButton("Delete Post", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                db.collection("homeposts")
+                                        .whereEqualTo("epoch", homePostsArrayList.get(position).getEpoch())
+                                        .get()
+                                        .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                            @Override
+                                            public void onSuccess(QuerySnapshot documentSnapshots) {
+                                                documentSnapshots.getDocuments().remove(homePostsArrayList.get(position));
+                                            }
+                                        });
+                            }
+                        }).show();
+                    }
+//                    }
                 }
             });
 
@@ -169,4 +207,31 @@ public class HomeFragment extends Fragment {
     }
 
 
+    public void onHomeItemClick(View view, final int position) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        if (homePostsArrayList.get(position).getBy_userNumber() == mUserSharedPreferences.getString(ApplicationConstants.phoneNumber, null)) {
+            builder.setCancelable(true);
+            builder.setMessage("Are you sure you want to delete this post ?");
+            builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            });
+            builder.setPositiveButton("Delete Post", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    db.collection("homeposts")
+                            .whereEqualTo("epoch", homePostsArrayList.get(position).getEpoch())
+                            .get()
+                            .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                                @Override
+                                public void onSuccess(QuerySnapshot documentSnapshots) {
+                                    documentSnapshots.getDocuments().remove(homePostsArrayList.get(position));
+                                }
+                            });
+                }
+            });
+        }
+    }
 }

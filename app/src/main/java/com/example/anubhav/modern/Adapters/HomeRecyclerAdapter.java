@@ -65,7 +65,6 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
         holder.homeDetailTextView.setText(postItem.getDetails());
         holder.homeTimeTextView.setText(postItem.getTime());
         holder.homeDateTextView.setText(postItem.getDate());
-//        holder.homeUserTextView.setText(postItem.getBy_user());
         Glide.with(mContext.getApplicationContext())
                 .load(postItem.getPostImageURL())
                 .asBitmap()
@@ -85,6 +84,7 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.postImageView);
 
+        db = FirebaseFirestore.getInstance();
 
         db.collection("users").document(postItem.getBy_userNumber()).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -100,6 +100,8 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
                                     .into(holder.homeCircularImageView);
 
                             holder.homeUserTextView.setText(userItem.getName());
+                            Log.d("PICTUREFETCHADAPTER", userItem.getName());
+
                         }
                     }
                 })
@@ -121,10 +123,10 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
 
 
     public interface HomeClickListener {
-        void onItemClick(View view, int position);
+        void onHomeItemClick(View view, int position);
     }
 
-    public static class HomeViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class HomeViewHolder extends RecyclerView.ViewHolder implements View.OnLongClickListener {
         ImageView postImageView;
         TextView homeTimeTextView;
         TextView homeDateTextView;
@@ -137,7 +139,7 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
 
         public HomeViewHolder(View itemView, HomeClickListener homeClickListener) {
             super(itemView);
-            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
             postImageView = itemView.findViewById(R.id.home_imageView);
             homeDateTextView = itemView.findViewById(R.id.homedate_textView);
             homeDetailTextView = itemView.findViewById(R.id.homedetail_textView);
@@ -149,17 +151,17 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
         }
 
         @Override
-        public void onClick(View view) {
+        public boolean onLongClick(View view) {
             int id = view.getId();
             int position = getAdapterPosition();
             if (position != RecyclerView.NO_POSITION) {
-                if (id == R.id.home_cardLayout) {
-                    onClickListener.onItemClick(view, position);
-
-                }
+//                if (id == R.id.home_cardLayout) {
+                onClickListener.onHomeItemClick(view, position);
+//                }
             }
-
+            return true;
         }
 
     }
+
 }

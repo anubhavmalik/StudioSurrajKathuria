@@ -21,7 +21,7 @@ import com.example.anubhav.modern.Constants.ApplicationConstants;
 import com.example.anubhav.modern.Models.InquiryItem;
 import com.example.anubhav.modern.Models.TimeFetcher;
 import com.example.anubhav.modern.R;
-import com.example.anubhav.modern.Visible.Login;
+import com.example.anubhav.modern.VisibleActivities.Login;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;

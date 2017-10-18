@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -133,23 +132,23 @@ public class HomeUploaderFragment extends Fragment implements ActivityCompat.OnR
                                     showProgress(false);
                                     Snackbar.make(mPhotoPickerButton, "You Posted Successfully", Snackbar.LENGTH_SHORT).show();
 
-                                    Handler h = new Handler();
-                                    h.postDelayed(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            Thread thread = new Thread(new Runnable() {
-                                                @Override
-                                                public void run() {
+//                                    Handler h = new Handler();
+//                                    h.postDelayed(new Runnable() {
+//                                        @Override
+//                                        public void run() {
+//                                            Thread thread = new Thread(new Runnable() {
+//                                                @Override
+//                                                public void run() {
 //                                                    HomeFragment homeFragment = new HomeFragment();
 //                                                    getFragmentManager().beginTransaction().replace(R.id.content, homeFragment).commit();
-                                                    getFragmentManager().popBackStackImmediate();
-                                                }
-                                            });
-                                            thread.start();
+//                                                    getFragmentManager().popBackStackImmediate();
+//                                                }
+//                                            });
+//                                            thread.start();
 
 
-                                        }
-                                    }, 1000);
+//                                        }
+//                                    }, 1000);
 
                                 }
                             })

@@ -114,6 +114,8 @@ public class MainActivity extends AppCompatActivity {
         profileFragment = new ProfileFragment();
         inquiryFragment = new InquiryFragment();
 
+//        homeFragment.setHomeItemLongClickListener(this);
+
         navigation.setSelectedItemId(R.id.navigation_catalog);
 
 
