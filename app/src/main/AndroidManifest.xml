@@ -30,7 +30,7 @@
         android:theme="@style/AppTheme"
         android:windowSoftInputMode="adjustPan">
         <activity
-            android:name=".MainActivity"
+            android:name="com.example.anubhav.SurrajKathuriaClothing.MainActivity"
             android:label="@string/app_name"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -40,17 +40,51 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".VisibleActivities.Login"
+            android:name="com.example.anubhav.SurrajKathuriaClothing.VisibleActivities.Login"
+            android:label="Log In"
             android:screenOrientation="portrait"
-            android:theme="@style/Theme.Transparent"></activity>
-        <activity android:name=".VisibleActivities.GetDetailsActivity" />
+            android:theme="@style/Theme.Transparent" />
+        <activity
+            android:name="com.example.anubhav.SurrajKathuriaClothing.VisibleActivities.GetDetailsActivity"
+            android:screenOrientation="portrait"
+            android:label="Tell us more"
+            />
 
         <receiver
-            android:name=".BroadcastRecievers.ConnectivityBroadcastReceiver"
+            android:name="com.example.anubhav.SurrajKathuriaClothing.BroadcastRecievers.ConnectivityBroadcastReceiver"
             android:enabled="true"
-            android:exported="true"></receiver>
+            android:exported="true" />
 
-        <activity android:name=".VisibleActivities.OtpManual"></activity>
+        <activity
+            android:name="com.example.anubhav.SurrajKathuriaClothing.VisibleActivities.OtpManual"
+            android:label="Enter OTP"
+            />
+
+        <service
+            android:name="com.example.anubhav.SurrajKathuriaClothing.Services.FirebaseCloudMessaging"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/for_footer_1"
+            android:value="@color/colorPrimary" />
+        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_color"
+            android:resource="@color/colorAccent" />
+
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+
+
+
     </application>
 
 </manifest>

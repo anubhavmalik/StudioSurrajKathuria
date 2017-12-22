@@ -23,6 +23,7 @@
             android:hint="Enter text here"
             android:maxLength="200"
             android:textColor="@color/hintColor"
+            android:textColorHint="@color/hintColor"
             android:textSize="17dp"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -42,6 +43,7 @@
             android:maxLength="45"
             android:maxLines="1"
             android:textColor="@color/hintColor"
+            android:textColorHint="@color/hintColor"
             android:textSize="17dp"
             app:layout_constraintBottom_toTopOf="@+id/cataloguploader_editText"
             app:layout_constraintHorizontal_bias="0.0"
@@ -50,6 +52,17 @@
             app:layout_constraintTop_toBottomOf="@+id/cataloguploader_nameTextView"
             app:layout_constraintVertical_bias="0.506"
             tools:layout_editor_absoluteY="159dp" />
+
+        <TextView
+            android:id="@+id/catalog_image_uri_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="0dp"
+            android:text="No image selected"
+            android:textColor="@color/hintColor"
+            app:layout_constraintLeft_toLeftOf="@+id/cataloguploader_imageView"
+            app:layout_constraintTop_toBottomOf="@+id/cataloguploader_imageView" />
 
         <ImageView
             android:id="@+id/cataloguploader_imageView"
@@ -71,11 +84,11 @@
             android:layout_marginTop="0dp"
             android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.25"
+            app:layout_constraintHorizontal_bias="0.43"
             app:layout_constraintLeft_toLeftOf="@+id/cataloguploader_circleImageView"
             app:layout_constraintRight_toRightOf="@+id/cataloguploader_circleImageView"
             app:layout_constraintTop_toBottomOf="@+id/cataloguploader_editText"
-            app:layout_constraintVertical_bias="1.0">
+            app:layout_constraintVertical_bias="0.51">
 
         </com.victor.loading.newton.NewtonCradleLoading>
 

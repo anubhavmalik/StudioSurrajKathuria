@@ -1,92 +1,122 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark">
 
-    <EditText
-        android:id="@+id/homeuploader_editText"
-        android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="159dp"
-        android:gravity="top"
-        android:hint="Enter text here"
-        android:maxLength="200"
-        android:textColor="@color/hintColor"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/homeuploader_imageView"
-        android:layout_width="50dp"
-        android:layout_height="44dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:src="@drawable/image_icon"
-        app:layout_constraintLeft_toLeftOf="@+id/homeuploader_editText"
-        app:layout_constraintTop_toBottomOf="@+id/homeuploader_editText" />
+        <ImageView
+            android:id="@+id/main_background_imageView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            android:src="@drawable/studio_entrance_colored" />
 
-    <com.victor.loading.newton.NewtonCradleLoading
-        android:id="@+id/homenewton_cradle"
-        android:layout_width="0dp"
-        android:layout_height="143dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginTop="0dp"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toRightOf="@+id/homeuploader_imageView"
-        app:layout_constraintRight_toLeftOf="@+id/homeuploader_fab"
-        app:layout_constraintTop_toBottomOf="@+id/homeuploader_editText">
+        <EditText
+            android:id="@+id/homeuploader_editText"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="159dp"
+            android:gravity="top"
+            android:hint="Enter text here"
+            android:maxLength="200"
+            android:textColor="@color/hintColor"
+            android:textColorHint="@color/hintColor"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:fontFamily="@font/lily_script_one"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    </com.victor.loading.newton.NewtonCradleLoading>
+        <TextView
+            android:id="@+id/home_image_uri_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="0dp"
+            android:fontFamily="@font/lily_script_one"
+            android:text="No image selected"
+            android:textColorHint="@color/hintColor"
+            app:layout_constraintLeft_toLeftOf="@+id/homeuploader_imageView"
+            app:layout_constraintTop_toBottomOf="@+id/homeuploader_imageView" />
 
-    <TextView
-        android:id="@+id/homeuploader_nameTextView"
-        android:layout_width="208dp"
-        android:layout_height="24dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:gravity="center"
-        android:text="Name"
-        android:textColor="@color/hintColor"
-        android:textStyle="bold"
-        app:layout_constraintLeft_toLeftOf="@+id/homeuploader_circleImageView"
-        app:layout_constraintRight_toRightOf="@+id/homeuploader_circleImageView"
-        app:layout_constraintTop_toBottomOf="@+id/homeuploader_circleImageView" />
+        <ImageView
+            android:id="@+id/homeuploader_imageView"
+            android:layout_width="50dp"
+            android:layout_height="44dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/image_icon"
+            app:layout_constraintLeft_toLeftOf="@+id/homeuploader_editText"
+            app:layout_constraintTop_toBottomOf="@+id/homeuploader_editText" />
 
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/homeuploader_circleImageView"
-        android:layout_width="75dp"
-        android:layout_height="63dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/homeuploader_editText"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.506" />
+        <com.victor.loading.newton.NewtonCradleLoading
+            android:id="@+id/homenewton_cradle"
+            android:layout_width="300dp"
+            android:layout_height="143dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginTop="0dp"
+            android:gravity="center"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.25"
+            app:layout_constraintLeft_toLeftOf="@+id/homeuploader_circleImageView"
+            app:layout_constraintRight_toRightOf="@+id/homeuploader_circleImageView"
+            app:layout_constraintTop_toBottomOf="@+id/homeuploader_editText"
+            app:layout_constraintVertical_bias="0.435">
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/homeuploader_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:src="@drawable/tick_round"
-        app:layout_constraintRight_toRightOf="@+id/homeuploader_editText"
-        app:layout_constraintTop_toBottomOf="@+id/homeuploader_editText" />
-</android.support.constraint.ConstraintLayout>
+        </com.victor.loading.newton.NewtonCradleLoading>
+
+        <TextView
+            android:id="@+id/homeuploader_nameTextView"
+            android:layout_width="208dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:fontFamily="@font/lily_script_one"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:text="Name"
+            android:textColor="@color/hintColor"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="@+id/homeuploader_circleImageView"
+            app:layout_constraintRight_toRightOf="@+id/homeuploader_circleImageView"
+            app:layout_constraintTop_toBottomOf="@+id/homeuploader_circleImageView" />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/homeuploader_circleImageView"
+            android:layout_width="75dp"
+            android:layout_height="63dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toTopOf="@+id/homeuploader_editText"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.506" />
+
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/homeuploader_fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:src="@drawable/tick_round"
+            app:layout_constraintRight_toRightOf="@+id/homeuploader_editText"
+            app:layout_constraintTop_toBottomOf="@+id/homeuploader_editText" />
+    </android.support.constraint.ConstraintLayout>
+</android.support.design.widget.CoordinatorLayout>

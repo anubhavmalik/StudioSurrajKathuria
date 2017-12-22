@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#ff0163</color>
-    <color name="colorPrimaryDark">#585252</color>
     <color name="colorAccent">#ff0163</color>
+    <color name="colorPrimaryDark">#585252</color>
+    <color name="cardColor">#c2585252</color>
     <color name="hintColor">#efebe9</color>
     <color name="logincolor">#bdbdbd</color>
+
 
 </resources>

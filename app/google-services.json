@@ -49,6 +49,94 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:822634666690:android:d40c0cbe7df7c261",
+        "android_client_info": {
+          "package_name": "com.example.anubhav.modern_admin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "822634666690-hj8k1imm7hfidcb306haddghdj5lbrvo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.anubhav.modern_admin",
+            "certificate_hash": "5db1f616151aedcbf675eb308ccae27ac44546fc"
+          }
+        },
+        {
+          "client_id": "822634666690-gou92gs6hcggvpnigrfubahdgc40lrba.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVi5LTgHICnwfBos6ISvFwgADq8Yd4dDo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "822634666690-gou92gs6hcggvpnigrfubahdgc40lrba.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:822634666690:android:7a1bd7a015ca50c8",
+        "android_client_info": {
+          "package_name": "com.example.anubhav.SurrajKathuriaClothing"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "822634666690-u0acpe6rga5kj5jt70qdfhtjnnvmlofr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.anubhav.SurrajKathuriaClothing",
+            "certificate_hash": "5db1f616151aedcbf675eb308ccae27ac44546fc"
+          }
+        },
+        {
+          "client_id": "822634666690-gou92gs6hcggvpnigrfubahdgc40lrba.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAVi5LTgHICnwfBos6ISvFwgADq8Yd4dDo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "822634666690-gou92gs6hcggvpnigrfubahdgc40lrba.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"

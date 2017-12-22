@@ -5,8 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorPrimaryDark"
-    tools:context="com.example.anubhav.modern.VisibleActivities.OtpManual">
+    tools:context="com.example.anubhav.SurrajKathuriaClothing.VisibleActivities.OtpManual">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/studio_entrance_colored" />
     <ImageView
         android:id="@+id/imageView3"
         android:layout_width="wrap_content"
@@ -29,6 +34,7 @@
         android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
         android:gravity="center"
+        android:fontFamily="@font/lily_script_one"
         android:hint="Enter OTP"
         android:textColor="@color/hintColor"
         android:textColorHint="@color/hintColor"
@@ -46,6 +52,8 @@
         android:layout_marginTop="49dp"
         android:background="@color/colorPrimary"
         android:text="Submit"
+        android:fontFamily="@font/lily_script_one"
+        android:textAllCaps="false"
         android:textColor="@color/hintColor"
         app:layout_constraintLeft_toLeftOf="@+id/otp_manual_editText"
         app:layout_constraintRight_toRightOf="@+id/otp_manual_editText"
