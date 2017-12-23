@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity implements HomeRecyclerAdapt
     ArrayList<PostItem> homePostsArrayList;
     BottomNavigationView navigation;
     FirebaseFirestore db;
+    TextView tv;
     private boolean doubleBackToExitPressedOnce;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -54,25 +55,25 @@ public class MainActivity extends AppCompatActivity implements HomeRecyclerAdapt
 
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    setTitle("Home");
+                    tv.setText("Home");
                     setFragment(homeFragment);
 
 
                     return true;
                 case R.id.navigation_catalog:
-                    setTitle("The Catalog");
+                    tv.setText("The Catalog");
                     setFragment(catalogFragment);
 
                     return true;
                 case R.id.navigation_profile:
-                    setTitle("Profile");
+                    tv.setText("Profile");
                     setFragment(profileFragment);
 
 
                     return true;
 
                 case R.id.navigation_inquiry:
-                    setTitle("Send Inquiry");
+                    tv.setText("Send Inquiry");
                     setFragment(inquiryFragment);
 
 
@@ -112,7 +113,6 @@ public class MainActivity extends AppCompatActivity implements HomeRecyclerAdapt
         startup = true;
         homePostsArrayList = new ArrayList<>();
         navigation = findViewById(R.id.navigation);
-//        navigation.enable
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         db = FirebaseFirestore.getInstance();
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
@@ -120,14 +120,13 @@ public class MainActivity extends AppCompatActivity implements HomeRecyclerAdapt
                 .build();
         db.setFirestoreSettings(settings);
 
-        TextView tv = new TextView(getApplicationContext());
+        tv = new TextView(getApplicationContext());
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT);
         tv.setLayoutParams(lp);
-        tv.setText("Welcome");
         tv.setTextSize(20);
         tv.setTextColor(Color.parseColor("#FFFFFF"));
         Typeface tf = Typeface.createFromAsset(getAssets(), "Font/BilboSwashCaps-Regular.otf");
-        tv.setTypeface(tf);
+        tv.setTypeface(tf,Typeface.BOLD);
         getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         getSupportActionBar().setCustomView(tv);
 

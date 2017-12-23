@@ -83,6 +83,15 @@ public class HomeRecyclerAdapter extends RecyclerView.Adapter<HomeRecyclerAdapte
                 .centerCrop()
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.postImageView);
+        holder.homeUserTextView.setText(postItem.getBy_user());
+
+        Glide.with(mContext.getApplicationContext())
+                .load(postItem.getUserImageURL())
+                .asBitmap()
+                .centerCrop()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(holder.homeCircularImageView);
+
 
         db = FirebaseFirestore.getInstance();
 
