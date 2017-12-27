@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/catalog_cardView"
+    android:layout_width="match_parent"
+    android:layout_height="500dp"
+    android:onClick="onCatalogItemClicked"
+    android:orientation="vertical"
+    app:cardBackgroundColor="@color/cardColor"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="5dp"
+    app:cardPreventCornerOverlap="true"
+    app:cardUseCompatPadding="true">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/catalog_cardLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/catalog_imageView"
+            android:layout_width="0dp"
+            android:layout_height="320dp"
+            android:layout_marginEnd="7dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="7dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="3dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintDimensionRatio=""
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/catalog_titletextView" />
+
+        <ProgressBar
+            android:id="@+id/catalog_imageprogress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/catalog_imageView"
+            app:layout_constraintLeft_toLeftOf="@+id/catalog_imageView"
+            app:layout_constraintRight_toRightOf="@+id/catalog_imageView"
+            app:layout_constraintTop_toBottomOf="@+id/catalog_titletextView" />
+
+        <TextView
+            android:id="@+id/catalog_titletextView"
+            android:layout_width="0dp"
+            android:layout_height="25dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/lily_script_one"
+            android:gravity="center"
+            android:text="name"
+            android:textColor="@color/hintColor"
+            android:textSize="17dp"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="@+id/catalog_imageView"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/catalog_detailtextView"
+            android:layout_width="0dp"
+            android:layout_height="90dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="8dp"
+            android:text="Details"
+            android:textColor="@color/hintColor"
+            android:fontFamily="@font/lily_script_one"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintLeft_toLeftOf="@+id/catalog_imageView"
+            app:layout_constraintRight_toRightOf="@+id/catalog_imageView"
+            app:layout_constraintTop_toBottomOf="@+id/catalog_imageView" />
+
+
+    </android.support.constraint.ConstraintLayout>
+</android.support.v7.widget.CardView>

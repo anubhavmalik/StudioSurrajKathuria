@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -8,19 +9,21 @@
 
     <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/profile_image"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
+        android:layout_width="144dp"
+        android:layout_height="137dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="58dp"
         android:src="@drawable/human_icon"
         app:civ_border_color="#FF000000"
         app:civ_border_width="2dp"
+        app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteY="39dp" />
 
     <TextView
         android:id="@+id/textView"
@@ -28,8 +31,11 @@
         android:layout_height="26dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
+        android:fontFamily="@font/lily_script_one"
         android:layout_marginTop="50dp"
+        android:gravity="start"
         android:text="Name :"
+        android:textColor="@color/hintColor"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 
@@ -41,8 +47,11 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="30dp"
+        android:gravity="start"
+        android:fontFamily="@font/lily_script_one"
         android:text="Phone : "
+        android:textColor="@color/hintColor"
         app:layout_constraintLeft_toLeftOf="@+id/textView"
         app:layout_constraintRight_toRightOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -53,10 +62,14 @@
         android:layout_height="40dp"
         android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
+        android:fontFamily="@font/lily_script_one"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="0dp"
+        android:gravity="start"
+        android:background="@drawable/edittext_style"
         android:hint="Your Name"
+        android:textColor="@color/hintColor"
         app:layout_constraintBottom_toBottomOf="@+id/textView"
         app:layout_constraintLeft_toRightOf="@+id/textView"
         app:layout_constraintRight_toRightOf="parent"
@@ -66,17 +79,44 @@
         android:id="@+id/profileNumber"
         android:layout_width="200dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="0dp"
+        android:fontFamily="@font/lily_script_one"
+        android:background="@drawable/edittext_style"
         android:hint="Your Number"
+        android:gravity="start"
+        android:textColor="@color/hintColor"
         app:layout_constraintBottom_toBottomOf="@+id/textView2"
         app:layout_constraintLeft_toRightOf="@+id/textView2"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView2"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="@+id/textView2" />
+
+    <ProgressBar
+        android:id="@+id/profile_image_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_image"
+        app:layout_constraintLeft_toLeftOf="@+id/profile_image"
+        app:layout_constraintRight_toRightOf="@+id/profile_image"
+        app:layout_constraintTop_toTopOf="@+id/profile_image" />
+
+    <ProgressBar
+        android:id="@+id/profile_fragment_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/profileNumber" />
 
 
     <Button
@@ -91,7 +131,9 @@
         android:layout_marginStart="8dp"
         android:focusableInTouchMode="false"
         android:isScrollContainer="false"
-        android:text="Save"
+        android:text="Update"
+        android:fontFamily="@font/lily_script_one"
+        android:textColor="@color/hintColor"
         android:windowSoftInputMode="adjustPan"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -99,20 +141,20 @@
         app:layout_constraintRight_toRightOf="parent" />
 
 
-    <ListView
-        android:id="@+id/profile_listView"
-        android:layout_width="368dp"
-        android:layout_height="185dp"
+    <Button
+        android:id="@+id/profile_signout_btn"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginLeft="7dp"
-        android:layout_marginTop="8dp"
-        android:focusableInTouchMode="false"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:isScrollContainer="false"
+        android:text="sign out"
+        android:fontFamily="@font/lily_script_one"
         android:windowSoftInputMode="adjustPan"
         app:layout_constraintBottom_toTopOf="@+id/profile_save"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profileNumber"
-        app:layout_constraintVertical_bias="1.0">
+        app:layout_constraintRight_toRightOf="parent" />
 
-    </ListView>
 </android.support.constraint.ConstraintLayout>

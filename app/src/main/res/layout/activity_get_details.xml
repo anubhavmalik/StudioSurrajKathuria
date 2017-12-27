@@ -4,18 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.anubhav.modern.Visible.GetDetailsActivity">
+    android:background="@color/colorPrimaryDark"
+    tools:context="com.example.anubhav.SurrajKathuriaClothing.VisibleActivities.GetDetailsActivity">
 
+    <ImageView
+        android:id="@+id/main_background_imageView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/studiotwo" />
 
-    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/profile_activity_image"
-        android:layout_width="96dp"
-        android:layout_height="96dp"
-        android:layout_marginEnd="8dp"
+        android:layout_width="140dp"
+        android:layout_height="120dp"
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="76dp"
+        android:onClick="onClick"
         android:src="@drawable/human_icon"
         app:civ_border_color="#FF000000"
         app:civ_border_width="2dp"
@@ -27,12 +34,14 @@
         android:id="@+id/textView"
         android:layout_width="90dp"
         android:layout_height="26dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="68dp"
+        android:fontFamily="@font/lily_script_one"
         android:text="Name :"
+        android:textColor="@color/hintColor"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="parent"
-
         app:layout_constraintTop_toBottomOf="@+id/profile_activity_image" />
 
     <TextView
@@ -44,7 +53,11 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
+        android:fontFamily="@font/lily_script_one"
         android:text="Phone : "
+        android:textColor="@color/hintColor"
+        android:textSize="16sp"
+        android:textStyle="bold"
         app:layout_constraintLeft_toLeftOf="@+id/textView"
         app:layout_constraintRight_toRightOf="@+id/textView"
         app:layout_constraintTop_toBottomOf="@+id/textView" />
@@ -58,31 +71,21 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+
+        android:background="@color/hintColor"
+        android:fontFamily="@font/lily_script_one"
         android:hint="Your Name"
         android:lines="1"
         android:maxLines="1"
         android:singleLine="true"
+        android:textColor="@color/colorPrimaryDark"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView"
         app:layout_constraintLeft_toRightOf="@+id/textView"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView"
         app:layout_constraintVertical_bias="0.666" />
-
-    <com.victor.loading.newton.NewtonCradleLoading
-        android:id="@+id/newtonian_loading"
-        android:layout_width="wrap_content"
-        android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_activity_Number">
-
-    </com.victor.loading.newton.NewtonCradleLoading>
 
     <TextView
         android:id="@+id/profile_activity_Number"
@@ -92,27 +95,34 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
+        android:background="@color/hintColor"
+        android:fontFamily="@font/lily_script_one"
         android:gravity="start|center"
         android:hint="Your Number"
-        android:textSize="18sp"
+        android:textColor="@color/colorPrimaryDark"
+        android:textColorHint="@color/colorPrimaryDark"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView2"
         app:layout_constraintLeft_toRightOf="@+id/textView2"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="@+id/textView2" />
 
 
-    <android.support.design.widget.FloatingActionButton
+    <Button
         android:id="@+id/profile_activity_save"
         style="@style/Widget.AppCompat.Button.Colored"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/lily_script_one"
         android:isScrollContainer="false"
         android:src="@android:drawable/ic_menu_upload"
+        android:text="Proceed"
         android:windowSoftInputMode="adjustPan"
-        app:fabSize="mini"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_activity_Number" />
 
@@ -123,8 +133,27 @@
         android:layout_height="31dp"
         android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
+        android:onClick="onClick"
         android:src="@mipmap/edit_icon"
         app:layout_constraintBottom_toBottomOf="@+id/profile_activity_image"
         app:layout_constraintLeft_toRightOf="@+id/profile_activity_image"
         app:layout_constraintTop_toBottomOf="@+id/profile_activity_image" />
+
+    <com.victor.loading.newton.NewtonCradleLoading
+        android:id="@+id/newtonian_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp"
+        android:gravity="center"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintLeft_toLeftOf="@+id/profile_activity_image"
+        app:layout_constraintRight_toRightOf="@+id/profile_activity_image"
+        app:layout_constraintTop_toBottomOf="@+id/profile_activity_save"
+        app:layout_constraintVertical_bias="1.0">
+
+    </com.victor.loading.newton.NewtonCradleLoading>
 </android.support.constraint.ConstraintLayout>

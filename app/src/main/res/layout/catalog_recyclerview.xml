@@ -14,14 +14,23 @@
 
     </android.support.v7.widget.RecyclerView>
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/catalog_fab"
+
+    <ProgressBar
+        android:id="@+id/catalog_fragment_progress"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="16dp"
-        android:layout_marginRight="16dp"
-        android:src="@drawable/feather_pen" />
+        android:layout_gravity="center"
+        android:visibility="visible" />
+
+    <!--<android.support.design.widget.FloatingActionButton-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:src="@drawable/feather_pen"-->
+    <!--android:layout_gravity="bottom|end"-->
+    <!--android:layout_marginBottom="16dp"-->
+    <!--android:layout_marginRight="16dp"-->
+    <!--android:layout_marginEnd="16dp"-->
+    <!--android:id="@+id/catalog_fab"/>-->
 
 
 </android.support.design.widget.CoordinatorLayout>
