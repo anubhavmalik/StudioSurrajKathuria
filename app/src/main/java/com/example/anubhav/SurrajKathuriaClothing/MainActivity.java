@@ -43,7 +43,9 @@ public class MainActivity extends AppCompatActivity implements HomeRecyclerAdapt
     BottomNavigationView navigation;
     FirebaseFirestore db;
     TextView tv;
+
     private boolean doubleBackToExitPressedOnce;
+
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 

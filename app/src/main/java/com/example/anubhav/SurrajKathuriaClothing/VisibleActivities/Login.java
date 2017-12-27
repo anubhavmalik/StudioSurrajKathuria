@@ -174,7 +174,6 @@ public class Login extends AppCompatActivity {
         if (requestCode == OTP_REQUEST && RESULT_OK == resultCode) {
             PhoneAuthCredential credential = new PhoneAuthCredential(mVerificationId, data.getStringExtra(IntentConstants.otpRequest));
             signInWithPhoneAuthCredential(credential);
-
         }
 
     }
